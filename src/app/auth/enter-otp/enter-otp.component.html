@@ -1,0 +1,66 @@
+<app-auth-layout title="Enter OTP">
+    <form [formGroup]="otpForm" (ngSubmit)="verifyOtp()" class="w-full max-w-md mx-auto">
+      <div class="flex justify-center gap-2 mt-6 mb-4">
+        <input
+          type="text"
+          inputmode="numeric"
+          maxlength="1"
+          class="w-12 h-12 text-center text-lg border border-gray-400 shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-md focus:outline-none focus:ring-2 focus:ring-orange-600"
+          formControlName="otp1"
+          (input)="onInputChange($event, 0)"
+          (keydown)="onKeyDown($event, 0)"
+        />
+        <input
+          type="text"
+          inputmode="numeric"
+          maxlength="1"
+          class="w-12 h-12 text-center text-lg border border-gray-400 shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-md focus:outline-none focus:ring-2 focus:ring-orange-600"
+          formControlName="otp2"
+          (input)="onInputChange($event, 1)"
+          (keydown)="onKeyDown($event, 1)"
+        />
+        <input
+          type="text"
+          inputmode="numeric"
+          maxlength="1"
+          class="w-12 h-12 text-center text-lg border border-gray-400 shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-md focus:outline-none focus:ring-2 focus:ring-orange-600"
+          formControlName="otp3"
+          (input)="onInputChange($event, 2)"
+          (keydown)="onKeyDown($event, 2)"
+        />
+        <input
+          type="text"
+          inputmode="numeric"
+          maxlength="1"
+          class="w-12 h-12 text-center text-lg border border-gray-400 shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-md focus:outline-none focus:ring-2 focus:ring-orange-600"
+          formControlName="otp4"
+          (input)="onInputChange($event, 3)"
+          (keydown)="onKeyDown($event, 3)"
+        />
+        <input
+          type="text"
+          inputmode="numeric"
+          maxlength="1"
+          class="w-12 h-12 text-center text-lg border border-gray-400 shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-md focus:outline-none focus:ring-2 focus:ring-orange-600"
+          formControlName="otp5"
+          (input)="onInputChange($event, 4)"
+          (keydown)="onKeyDown($event, 4)"
+        />
+        <input
+          type="text"
+          inputmode="numeric"
+          maxlength="1"
+          class="w-12 h-12 text-center text-lg border border-gray-400 shadow-[0_2px_4px_rgba(0,0,0,0.1)] rounded-md focus:outline-none focus:ring-2 focus:ring-orange-600"
+          formControlName="otp6"
+          (input)="onInputChange($event, 5)"
+          (keydown)="onKeyDown($event, 5)"
+        />
+      </div>
+  
+      <div class="text-right text-orange-600 text-sm font-medium cursor-pointer my-10">
+        <span (click)="resendOtp()">Resend OTP</span>
+      </div>
+      <app-auth-button routerLink="/sendOTP" [text]="'Verify OTP'" [onClick]="verifyOtp"></app-auth-button>
+    </form>
+  </app-auth-layout>
+  

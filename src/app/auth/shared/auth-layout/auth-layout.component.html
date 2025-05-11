@@ -1,0 +1,23 @@
+<div class="min-h-screen flex items-start justify-center px-4 pt-0">
+  <div class="w-full max-w-md space-y-6">
+
+    <!-- Purple Bar: Covers 25% of screen height -->
+    <div
+      class="bg-purple-600 text-white rounded-b-3xl text-center font-semibold text-4xl shadow-md w-full fixed top-0 left-0 z-10 flex items-center justify-center"
+      style="height: 15vh;">
+      {{ title }}
+    </div>
+
+    <!-- Spacer matching the purple height -->
+    <div class="pt-[20vh]"></div>
+
+    <!-- App Name -->
+    <h1 class="text-3xl text-center text-orange-600 font-bold pb-9">MessMate</h1>
+
+    <!-- Projected content -->
+    <ng-content></ng-content>
+
+    <!-- Optional footer -->
+    <ng-content select="[footer]"></ng-content>
+  </div>
+</div>
