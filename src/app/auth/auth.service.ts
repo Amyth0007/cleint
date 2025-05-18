@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, map } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 interface AuthResponse {
   success: boolean;
@@ -24,7 +25,7 @@ interface AuthResponse {
 export class AuthService {
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
-  private readonly API_URL = 'http://localhost:3003/api/auth';
+  private readonly API_URL = `${environment.apiUrl}/auth`;
 
   constructor(private http: HttpClient, private router: Router) {
     this.currentUserSubject = new BehaviorSubject<any>(
@@ -55,7 +56,7 @@ export class AuthService {
       );
   }
 
-  signup(userData: { name: string; email: string; password: string }) {
+  signup(userData: { username: string; email: string; password: string }) {
     return this.http.post<AuthResponse>(`${this.API_URL}/signup`, userData)
       .pipe(
         map(response => {

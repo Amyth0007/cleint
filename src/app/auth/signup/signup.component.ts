@@ -36,7 +36,7 @@ export class SignupComponent {
     private router: Router
   ) {
     this.signupForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
+      username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
@@ -61,12 +61,12 @@ export class SignupComponent {
         return;
       }
 
-      const { name, email, password } = this.signupForm.value;
+      const { username, email, password } = this.signupForm.value;
       
-      this.authService.signup({ name, email, password }).subscribe({
+      this.authService.signup({ username, email, password }).subscribe({
         next: (response) => {
           if (response.success) {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/']);
           } else {
             this.errorMessage = response.message || 'Signup failed. Please try again.';
           }
