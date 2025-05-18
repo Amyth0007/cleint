@@ -1,23 +1,19 @@
-<div class="min-h-screen flex items-start justify-center px-4 pt-0">
-  <div class="w-full max-w-md space-y-6">
-
-    <!-- Purple Bar: Covers 25% of screen height -->
-    <div
-      class="bg-purple-600 text-white rounded-b-3xl text-center font-semibold text-4xl shadow-md w-full fixed top-0 left-0 z-10 flex items-center justify-center"
-      style="height: 15vh;">
-      {{ title }}
+<div class="min-h-screen flex items-center justify-center bg-orange-50 px-4 py-12">
+  <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
+    <div class="text-center">
+      <h1 class="text-3xl font-bold text-orange-600 mb-2">{{ title }}</h1>
+      <p class="text-gray-600 text-sm">Welcome to MessMate</p>
     </div>
-
-    <!-- Spacer matching the purple height -->
-    <div class="pt-[20vh]"></div>
-
-    <!-- App Name -->
-    <h1 class="text-3xl text-center text-orange-600 font-bold pb-9">MessMate</h1>
-
-    <!-- Projected content -->
+    
     <ng-content></ng-content>
 
-    <!-- Optional footer -->
-    <ng-content select="[footer]"></ng-content>
+    <div *ngIf="showFooter" class="mt-8 pt-6 border-t text-center text-sm text-gray-500">
+      <p>By continuing, you agree to MessMate's</p>
+      <div class="space-x-2">
+        <a href="#" class="text-orange-600 hover:text-orange-800">Terms of Service</a>
+        <span>&</span>
+        <a href="#" class="text-orange-600 hover:text-orange-800">Privacy Policy</a>
+      </div>
+    </div>
   </div>
 </div>

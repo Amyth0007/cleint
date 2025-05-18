@@ -1,45 +1,84 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
-import { AuthLayoutComponent } from '../shared/auth-layout/auth-layout.component';
-import { AuthInputComponent } from '../shared/auth-input/auth-input.component';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../auth.service';
 import { AuthButtonComponent } from '../shared/auth-button/auth-button.component';
-import { AuthSeparatorComponent } from '../shared/auth-separator/auth-separator.component';
-import { AuthSocialButtonComponent } from '../shared/auth-social-button/auth-social-button.component';
-import { Router, RouterModule } from '@angular/router';
+import { AuthInputComponent } from '../shared/auth-input/auth-input.component';
+import { AuthLayoutComponent } from '../shared/auth-layout/auth-layout.component';
+import { AuthSeparatorComponent } from "../shared/auth-separator/auth-separator.component";
+import { AuthSocialButtonComponent } from "../shared/auth-social-button/auth-social-button.component";
 
 @Component({
   selector: 'app-signup',
+  templateUrl: './signup.component.html',
   standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
-    AuthLayoutComponent,
-    AuthButtonComponent,
+    RouterLink,
     AuthInputComponent,
+    AuthButtonComponent,
+    AuthLayoutComponent,
     AuthSeparatorComponent,
-    AuthSocialButtonComponent,
-    RouterModule
-  ],
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']  // fixed: `styleUrls`, not `styleUrl`
+    AuthSocialButtonComponent
+  ]
 })
-export class SignupComponent implements OnInit {
-  signupForm!: FormGroup;
+export class SignupComponent {
+  signupForm: FormGroup;
+  isLoading = false;
+  errorMessage = '';
+  passwordMismatch = false;
 
   constructor(
     private fb: FormBuilder,
-  ) {}
-  ngOnInit(): void {
-    console.log('SignupComponent loaded');
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.signupForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-    });
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required]]
+    }, { validator: this.passwordMatchValidator });
   }
 
-  onSubmit = () => {
+  passwordMatchValidator(g: FormGroup) {
+    return g.get('password')?.value === g.get('confirmPassword')?.value
+      ? null
+      : { mismatch: true };
+  }
+
+  onSubmit() {
     if (this.signupForm.valid) {
-      const data = this.signupForm.value;
-      // handle signup logic
+      this.isLoading = true;
+      this.errorMessage = '';
+      this.passwordMismatch = false;
+
+      if (this.signupForm.hasError('mismatch')) {
+        this.passwordMismatch = true;
+        this.isLoading = false;
+        return;
+      }
+
+      const { name, email, password } = this.signupForm.value;
+      
+      this.authService.signup({ name, email, password }).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.errorMessage = response.message || 'Signup failed. Please try again.';
+          }
+        },
+        error: (error) => {
+          this.errorMessage = error.error?.message || 'Signup failed. Please try again.';
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+      });
     }
   }
   signUpWithGoogle = () => {

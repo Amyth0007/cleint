@@ -1,1 +1,17 @@
-<p>auth-input works!</p>
+<div class="mb-4">
+  <label class="block text-sm font-medium text-gray-700 mb-1">{{ label }}</label>
+  <input
+    [type]="type"
+    [placeholder]="placeholder"
+    [formControl]="formControl"
+    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+    [class.border-red-500]="control.touched && control.invalid"
+  />
+  <div *ngIf="control.touched && control.invalid" class="mt-1 text-sm text-red-500">
+    <div *ngIf="control.errors?.['required']">{{ label }} is required</div>
+    <div *ngIf="control.errors?.['email']">Please enter a valid email</div>
+    <div *ngIf="control.errors?.['minlength']">
+      {{ label }} must be at least {{ control.errors?.['minlength'].requiredLength }} characters
+    </div>
+  </div>
+</div>
