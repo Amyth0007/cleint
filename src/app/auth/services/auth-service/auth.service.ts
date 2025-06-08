@@ -4,20 +4,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AuthResponse } from '../../interfaces/auth.interface';
 
-interface AuthResponse {
-  success: boolean;
-  message: string;
-  data: {
-    message: string;
-    user: {
-      id: number;
-      name: string;
-      email: string;
-    };
-    token: string;
-  };
-}
 
 @Injectable({
   providedIn: 'root'

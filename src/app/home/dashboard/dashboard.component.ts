@@ -2,46 +2,35 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from '../../auth/services/auth-service/auth.service';
 import { UserService } from '../../services/user.service';
 import { MapComponent } from '../shared/map/map.component';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
-
+import { UserData } from 'src/app/auth/interfaces/user.interface';
+import { Location } from 'src/app/auth/interfaces/location.interface';
+import { FormsModule } from '@angular/forms';
 declare var google: any;
 
-interface Location {
-  id: number;
-  name: string;
-  description: string;
-  distance: number;
-  routeDistance?: string;
-  routeDuration?: string;
-  rating: number;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-}
 
-interface UserData {
-  name: string;
-  email: string;
-  // add other user properties as needed
-}
+
+
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, NavbarComponent, MapComponent]
+  imports: [CommonModule, RouterLink, RouterLinkActive, NavbarComponent, MapComponent, FormsModule]
 })
 export class DashboardComponent implements OnInit {
   userData: UserData | null = null;
   selectedLocation: Location | null = null;
   userLocation: { lat: number; lng: number } | null = null;
   private directionsService: any;
-  
+  selectedCity: string = 'All';
+  topCities: string[] = ['All', 'Pune', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai'];
+  messNameSearchQuery: string = '';
+
   messLocations: Location[] = [
     {
       id: 1,
@@ -49,6 +38,7 @@ export class DashboardComponent implements OnInit {
       description: "Authentic home-style meals with pure ghee",
       distance: 0.8,
       rating: 4.5,
+      city: "Pune",
       coordinates: { lat: 18.5204, lng: 73.8567 }
     },
     {
@@ -57,6 +47,7 @@ export class DashboardComponent implements OnInit {
       description: "Healthy and nutritious vegetarian food",
       distance: 1.2,
       rating: 4.3,
+      city: "Pune",
       coordinates: { lat: 18.5314, lng: 73.8446 }
     },
     {
@@ -65,9 +56,56 @@ export class DashboardComponent implements OnInit {
       description: "Premium thalis with variety of items",
       distance: 1.5,
       rating: 4.7,
+      city: "Pune",
       coordinates: { lat: 18.5123, lng: 73.8289 }
+    },
+    {
+      id: 4,
+      name: "Mumbai Tiffin",
+      description: "Delicious Maharashtrian food",
+      distance: 2.0,
+      rating: 4.2,
+      city: "Mumbai",
+      coordinates: { lat: 19.076, lng: 72.8777 }
+    },
+    {
+      id: 5,
+      name: "Delhi Thali House",
+      description: "Authentic North Indian thalis",
+      distance: 2.3,
+      rating: 4.4,
+      city: "Delhi",
+      coordinates: { lat: 28.6139, lng: 77.209 }
+    },
+    {
+      id: 6,
+      name: "Bangalore Meals",
+      description: "South Indian meals with filter coffee",
+      distance: 1.8,
+      rating: 4.6,
+      city: "Bangalore",
+      coordinates: { lat: 12.9716, lng: 77.5946 }
+    },
+    {
+      id: 7,
+      name: "Hyderabad Ruchi",
+      description: "Spicy and flavorful Hyderabadi thalis",
+      distance: 2.5,
+      rating: 4.3,
+      city: "Hyderabad",
+      coordinates: { lat: 17.385, lng: 78.4867 }
+    },
+    {
+      id: 8,
+      name: "Chennai Veg Delight",
+      description: "Pure veg South Indian meals",
+      distance: 2.7,
+      rating: 4.1,
+      city: "Chennai",
+      coordinates: { lat: 13.0827, lng: 80.2707 }
     }
   ];
+
 
   constructor(
     private authService: AuthService,
@@ -79,11 +117,11 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     // Get user data
     console.log('Getting user data...');
-    
+
     this.userService.getUserData().subscribe({
       next: (data) => {
         console.log(data);
-        
+
         this.userData = data;
       },
       error: (error) => {
@@ -93,6 +131,22 @@ export class DashboardComponent implements OnInit {
 
     // Get user location
     this.getUserLocation();
+  }
+
+  get filteredMessLocationsByNameAndCity(): Location[] {
+    if (this.selectedCity === 'All') {
+      const query = this.messNameSearchQuery.toLowerCase().trim();
+      return this.messLocations.filter(location =>
+        location.name.toLowerCase().includes(query)
+      );
+    }
+    return this.messLocations.filter(location => {
+      const matchesCity = this.selectedCity ? location.city === this.selectedCity : true;
+      const matchesName = this.messNameSearchQuery
+        ? location.name.toLowerCase().includes(this.messNameSearchQuery.toLowerCase().trim())
+        : true;
+      return matchesCity && matchesName;
+    });
   }
 
   getUserLocation() {
@@ -133,9 +187,9 @@ export class DashboardComponent implements OnInit {
       console.log('No user location available for distance calculation');
       return;
     }
-    
+
     console.log('Updating route distances from user location:', this.userLocation);
-    
+
     // Update straight-line distances first
     this.messLocations = this.messLocations.map(location => ({
       ...location,

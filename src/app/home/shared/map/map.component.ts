@@ -1,29 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Location } from 'src/app/auth/interfaces/location.interface';
 
 declare var google: any;
 
 /// <reference types="@types/google.maps" />
 
-declare global {
-  interface Window {
-    google: typeof google;
-  }
-}
 
-interface Location {
-  id: number;
-  name: string;
-  description: string;
-  distance: number;
-  routeDistance?: string;
-  routeDuration?: string;
-  rating: number;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-}
+
+
 
 @Component({
   selector: 'app-map',
@@ -73,7 +58,7 @@ export class MapComponent implements OnInit, OnChanges {
       }
 
       const defaultCenter = { lat: 18.5204, lng: 73.8567 }; // Default center (Pune)
-      
+
       const mapOptions = {
         center: this.userLocation || defaultCenter,
         zoom: 13,
@@ -102,7 +87,7 @@ export class MapComponent implements OnInit, OnChanges {
       }
 
       this.map = new google.maps.Map(mapElement, mapOptions);
-      
+
       if (!this.map) {
         console.error('Failed to create map instance');
         return;
@@ -120,7 +105,7 @@ export class MapComponent implements OnInit, OnChanges {
 
       // Trigger resize event to ensure map renders properly
       google.maps.event.trigger(this.map, 'resize');
-      
+
       this.updateMarkers();
     } catch (error) {
       console.error('Error initializing map:', error);
@@ -130,7 +115,7 @@ export class MapComponent implements OnInit, OnChanges {
   private clearMap() {
     this.markers.forEach(marker => marker.setMap(null));
     this.markers = [];
-    
+
     if (this.directionsRenderer) {
       this.directionsRenderer.setMap(null);
     }
@@ -190,7 +175,7 @@ export class MapComponent implements OnInit, OnChanges {
       if (status === google.maps.DirectionsStatus.OK) {
         this.directionsRenderer.setMap(this.map);
         this.directionsRenderer.setDirections(result);
-        
+
         // Adjust map bounds to show the entire route
         const bounds = new google.maps.LatLngBounds();
         if (this.userLocation) {
@@ -203,4 +188,4 @@ export class MapComponent implements OnInit, OnChanges {
       }
     });
   }
-} 
+}

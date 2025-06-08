@@ -1,5 +1,5 @@
 <app-auth-layout title="Log In">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+    <form [formGroup]="loginForm" class="space-y-4">
         <app-auth-input label="Email" placeholder="Email" type="email" [control]="loginForm.controls['email']" />
         <app-auth-input label="Password" placeholder="Password" type="password"
             [control]="loginForm.controls['password']" />
