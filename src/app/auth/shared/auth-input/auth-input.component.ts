@@ -17,4 +17,11 @@ export class AuthInputComponent {
   get formControl(): FormControl {
     return this.control as FormControl;
   }
+  showPassword = false;
+  get inputType() {
+    return this.type === 'password' ? (this.showPassword ? 'text' : 'password') : this.type;
+  }
+  toggleVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 }

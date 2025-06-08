@@ -3,6 +3,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "typeRoots": ["node_modules/@types"],
     "types": ["google.maps"],
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",

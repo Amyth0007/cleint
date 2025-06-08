@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth-service/auth.service';
 import { AuthButtonComponent } from '../shared/auth-button/auth-button.component';
 import { AuthInputComponent } from '../shared/auth-input/auth-input.component';
 import { AuthLayoutComponent } from '../shared/auth-layout/auth-layout.component';
@@ -43,7 +43,7 @@ export class ForgotPasswordComponent {
       this.successMessage = '';
 
       const { email } = this.forgotPasswordForm.value;
-      
+
       // Here you would typically call your auth service's password reset method
       // For now, we'll just simulate success and redirect to OTP page
       setTimeout(() => {
@@ -53,4 +53,4 @@ export class ForgotPasswordComponent {
       }, 1500);
     }
   }
-} 
+}

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth-service/auth.service';
 import { AuthButtonComponent } from '../shared/auth-button/auth-button.component';
 import { AuthInputComponent } from '../shared/auth-input/auth-input.component';
 import { AuthLayoutComponent } from '../shared/auth-layout/auth-layout.component';
@@ -33,7 +33,7 @@ export class SignupComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {
     this.signupForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
@@ -50,25 +50,26 @@ export class SignupComponent {
   }
 
   onSubmit() {
+    if (this.signupForm.hasError('mismatch')) {
+        this.passwordMismatch = true;
+        this.isLoading = false;
+        return;
+      }
     if (this.signupForm.valid) {
       this.isLoading = true;
       this.errorMessage = '';
       this.passwordMismatch = false;
 
-      if (this.signupForm.hasError('mismatch')) {
-        this.passwordMismatch = true;
-        this.isLoading = false;
-        return;
-      }
-
       const { username, email, password } = this.signupForm.value;
-      
+
       this.authService.signup({ username, email, password }).subscribe({
         next: (response) => {
           if (response.success) {
+            // this.toastr.success(response.message, 'Success');
             this.router.navigate(['/']);
           } else {
             this.errorMessage = response.message || 'Signup failed. Please try again.';
+            // this.toastr.error(response.message, 'Error');
           }
         },
         error: (error) => {
@@ -84,9 +85,9 @@ export class SignupComponent {
   signUpWithGoogle = () => {
     console.log('Google sign-up');
   };
-  
+
   signUpWithFacebook = () => {
     console.log('Facebook sign-up');
-  }; 
+  };
 }
 
