@@ -1,10 +1,10 @@
 <app-auth-layout title="Log In">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+    <form [formGroup]="loginForm" class="space-y-4">
         <app-auth-input label="Email" placeholder="Email" type="email" [control]="loginForm.controls['email']" />
         <app-auth-input label="Password" placeholder="Password" type="password"
             [control]="loginForm.controls['password']" />
 
-        <app-auth-button [text]="'Log In'" [onClick]="onSubmit"></app-auth-button>
+        <app-auth-button [text]="isLoading ? 'Logging in...' : 'Log In'" [onClick]="onSubmit.bind(this)"></app-auth-button>
     </form>
     <span routerLink="/forgotPassword" class="mt-4 block text-black font-bold underline cursor-pointer">
         Forgot password?
@@ -14,8 +14,7 @@
 
     <app-auth-social-button iconUrl="icons/facebook.svg" text="Log In with Facebook" [onClick]="logInWithFacebook" />
 
-
-    <div footer class="text-center text-sm mt-6">
+    <div class="text-center text-sm mt-6">
         New to <span class="text-orange-600 font-bold">MessMate</span>?
         <a routerLink="/signup" class="text-black font-bold underline cursor-pointer">Sign Up</a>
     </div>

@@ -1,22 +1,27 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-auth-input',
-  template: `<div>
-  <label class="block text-sm font-medium text-gray-700 mb-1">{{ label }}</label>
-  <input
-    [type]="type"
-    [placeholder]="placeholder"
-    class="auth-input w-full mb-8"
-    [formControl]="control" />
-</div>`,
-  imports: [ReactiveFormsModule],
-  standalone: true
+  templateUrl: './auth-input.component.html',
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule]
 })
 export class AuthInputComponent {
   @Input() label: string = '';
   @Input() placeholder: string = '';
   @Input() type: string = 'text';
-  @Input() control: any;
+  @Input() control!: AbstractControl;
+
+  get formControl(): FormControl {
+    return this.control as FormControl;
+  }
+  showPassword = false;
+  get inputType() {
+    return this.type === 'password' ? (this.showPassword ? 'text' : 'password') : this.type;
+  }
+  toggleVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 }

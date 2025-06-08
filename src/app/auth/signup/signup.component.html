@@ -1,20 +1,56 @@
-<app-auth-layout title="Sign Up">
-  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-4">
-    <app-auth-input label="Email" placeholder="Email" type="email" [control]="signupForm.controls['email']" />
-    <app-auth-input label="Password" placeholder="Password" type="password"
-      [control]="signupForm.controls['password']" />
+<app-auth-layout title="Create your account">
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <app-auth-input
+      label="Full Name"
+      type="text"
+      placeholder="Enter your full name"
+      [control]="signupForm.controls['username']"
+    ></app-auth-input>
 
-    <app-auth-button [text]="'Get Started'" [onClick]="onSubmit"></app-auth-button>
+    <app-auth-input
+      label="Email"
+      type="email"
+      placeholder="Enter your email"
+      [control]="signupForm.controls['email']"
+    ></app-auth-input>
+
+    <app-auth-input
+      label="Password"
+      type="password"
+      placeholder="Create a password"
+      [control]="signupForm.controls['password']"
+    ></app-auth-input>
+
+    <app-auth-input
+      label="Confirm Password"
+      type="password"
+      placeholder="Confirm your password"
+      [control]="signupForm.controls['confirmPassword']"
+    ></app-auth-input>
+
+    <div *ngIf="passwordMismatch" class="text-red-500 text-sm">
+      Passwords do not match
+    </div>
+
+    <div class="space-y-4">
+      <app-auth-button 
+        [text]="isLoading ? 'Creating account...' : 'Sign Up'"
+        [onClick]="onSubmit.bind(this)"
+      ></app-auth-button>
+
+      <p class="text-center text-sm text-gray-600">
+        Already have an account?
+        <a 
+          routerLink="/login" 
+          class="text-orange-600 hover:text-orange-800">
+          Login
+        </a>
+      </p>
+    </div>
   </form>
 
   <app-auth-separator></app-auth-separator>
   <app-auth-social-button iconUrl="icons/google.svg" text="Sign up with Google" [onClick]="signUpWithGoogle" />
 
   <app-auth-social-button iconUrl="icons/facebook.svg" text="Sign up with Facebook" [onClick]="signUpWithFacebook" />
-
-
-  <div footer class="text-center text-sm mt-6">
-    Already have an account?
-    <a routerLink="/login" class="text-black font-bold underline cursor-pointer">Log in</a>
-  </div>
 </app-auth-layout>

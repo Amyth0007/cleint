@@ -1,0 +1,117 @@
+.modern-navbar {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.modern-navbar a {
+  color: #f97316;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.modern-navbar a:hover {
+  background-color: #fff7ed;
+  color: #ea580c;
+}
+
+.modern-navbar a.active {
+  background-color: #f97316;
+  color: white;
+}
+
+.menu-button {
+  display: none;
+  background: none;
+  border: none;
+  color: #f97316;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .menu-button {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: white;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+}
+
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.dashboard-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 7rem 1rem 2rem;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.location-card {
+  background: white;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.location-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-color: #10b981;
+}
+
+.location-card.selected {
+  border-color: #059669;
+  background-color: #f0fdf4;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-content {
+    padding: 6rem 1rem 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: 5rem 1rem 2rem;
+  }
+  .welcome-section{
+    padding-top: 2rem;
+  }
+}
