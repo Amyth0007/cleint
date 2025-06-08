@@ -90,5 +90,13 @@
         </div>
       </div>
     </div>
+
+    <!-- Menu Display Section -->
+    <div *ngIf="selectedLocation" class="mt-8">
+      <app-menu-display 
+        [messId]="selectedLocation.id"
+        [messName]="selectedLocation.name">
+      </app-menu-display>
+    </div>
   </main>
 </div>
