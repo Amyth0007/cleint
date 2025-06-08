@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../auth/auth.service';
+import { AuthService } from "../../auth/services/auth-service/auth.service";
 
 @Component({
   selector: 'app-profile',
@@ -18,13 +18,13 @@ import { AuthService } from '../../auth/auth.service';
               <p class="text-gray-600">{{ currentUser?.email }}</p>
             </div>
           </div>
-          
+
           <div class="space-y-4">
             <div class="border-t pt-4">
               <h4 class="text-lg font-medium text-orange-600 mb-2">Account Details</h4>
               <p class="text-gray-600">Member since: {{ currentUser?.createdAt | date }}</p>
             </div>
-            
+
             <div class="border-t pt-4">
               <h4 class="text-lg font-medium text-orange-600 mb-2">Preferences</h4>
               <p class="text-gray-600">Meal Plan: Standard</p>
@@ -55,4 +55,4 @@ export class ProfileComponent implements OnInit {
       .join('')
       .toUpperCase();
   }
-} 
+}
