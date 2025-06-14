@@ -2,9 +2,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { LocationService } from 'src/app/services/location.service';
 import { AuthService } from '../../auth/services/auth-service/auth.service';
 import { UserService } from '../../services/user.service';
 import { MapComponent } from '../shared/map/map.component';
+import { MenuDisplayComponent } from '../shared/menu-display/menu-display.component';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
 import { UserData } from 'src/app/auth/interfaces/user.interface';
 import { Location } from 'src/app/auth/interfaces/location.interface';
@@ -20,7 +22,7 @@ declare var google: any;
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, NavbarComponent, MapComponent, FormsModule]
+  imports: [CommonModule, RouterLink, RouterLinkActive, NavbarComponent, MapComponent, MenuDisplayComponent, FormsModule]
 })
 export class DashboardComponent implements OnInit {
   userData: UserData | null = null;
@@ -31,87 +33,90 @@ export class DashboardComponent implements OnInit {
   topCities: string[] = ['All', 'Pune', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai'];
   messNameSearchQuery: string = '';
 
-  messLocations: Location[] = [
-    {
-      id: 1,
-      name: "Annapurna Mess",
-      description: "Authentic home-style meals with pure ghee",
-      distance: 0.8,
-      rating: 4.5,
-      city: "Pune",
-      coordinates: { lat: 18.5204, lng: 73.8567 }
-    },
-    {
-      id: 2,
-      name: "Green Leaf Mess",
-      description: "Healthy and nutritious vegetarian food",
-      distance: 1.2,
-      rating: 4.3,
-      city: "Pune",
-      coordinates: { lat: 18.5314, lng: 73.8446 }
-    },
-    {
-      id: 3,
-      name: "Maharaja Mess",
-      description: "Premium thalis with variety of items",
-      distance: 1.5,
-      rating: 4.7,
-      city: "Pune",
-      coordinates: { lat: 18.5123, lng: 73.8289 }
-    },
-    {
-      id: 4,
-      name: "Mumbai Tiffin",
-      description: "Delicious Maharashtrian food",
-      distance: 2.0,
-      rating: 4.2,
-      city: "Mumbai",
-      coordinates: { lat: 19.076, lng: 72.8777 }
-    },
-    {
-      id: 5,
-      name: "Delhi Thali House",
-      description: "Authentic North Indian thalis",
-      distance: 2.3,
-      rating: 4.4,
-      city: "Delhi",
-      coordinates: { lat: 28.6139, lng: 77.209 }
-    },
-    {
-      id: 6,
-      name: "Bangalore Meals",
-      description: "South Indian meals with filter coffee",
-      distance: 1.8,
-      rating: 4.6,
-      city: "Bangalore",
-      coordinates: { lat: 12.9716, lng: 77.5946 }
-    },
-    {
-      id: 7,
-      name: "Hyderabad Ruchi",
-      description: "Spicy and flavorful Hyderabadi thalis",
-      distance: 2.5,
-      rating: 4.3,
-      city: "Hyderabad",
-      coordinates: { lat: 17.385, lng: 78.4867 }
-    },
-    {
-      id: 8,
-      name: "Chennai Veg Delight",
-      description: "Pure veg South Indian meals",
-      distance: 2.7,
-      rating: 4.1,
-      city: "Chennai",
-      coordinates: { lat: 13.0827, lng: 80.2707 }
-    }
-  ];
+  messLocations: Location[] = []
+  // [
+  //   {
+  //     id: 1,
+  //     name: "Annapurna Mess",
+  //     description: "Authentic home-style meals with pure ghee",
+  //     distance: 0.8,
+  //     rating: 4.5,
+  //     city: "Pune",
+  //     coordinates: { lat: 18.5204, lng: 73.8567 }
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Green Leaf Mess",
+  //     description: "Healthy and nutritious vegetarian food",
+  //     distance: 1.2,
+  //     rating: 4.3,
+  //     city: "Pune",
+  //     coordinates: { lat: 18.5314, lng: 73.8446 }
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Maharaja Mess",
+  //     description: "Premium thalis with variety of items",
+  //     distance: 1.5,
+  //     rating: 4.7,
+  //     city: "Pune",
+  //     coordinates: { lat: 18.5123, lng: 73.8289 }
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Mumbai Tiffin",
+  //     description: "Delicious Maharashtrian food",
+  //     distance: 2.0,
+  //     rating: 4.2,
+  //     city: "Mumbai",
+  //     coordinates: { lat: 19.076, lng: 72.8777 }
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Delhi Thali House",
+  //     description: "Authentic North Indian thalis",
+  //     distance: 2.3,
+  //     rating: 4.4,
+  //     city: "Delhi",
+  //     coordinates: { lat: 28.6139, lng: 77.209 }
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Bangalore Meals",
+  //     description: "South Indian meals with filter coffee",
+  //     distance: 1.8,
+  //     rating: 4.6,
+  //     city: "Bangalore",
+  //     coordinates: { lat: 12.9716, lng: 77.5946 }
+  //   },
+  //   {
+  //     id: 7,
+  //     name: "Hyderabad Ruchi",
+  //     description: "Spicy and flavorful Hyderabadi thalis",
+  //     distance: 2.5,
+  //     rating: 4.3,
+  //     city: "Hyderabad",
+  //     coordinates: { lat: 17.385, lng: 78.4867 }
+  //   },
+  //   {
+  //     id: 8,
+  //     name: "Chennai Veg Delight",
+  //     description: "Pure veg South Indian meals",
+  //     distance: 2.7,
+  //     rating: 4.1,
+  //     city: "Chennai",
+  //     coordinates: { lat: 13.0827, lng: 80.2707 }
+  //   }
+  // ];
 
 
   constructor(
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private locationService: LocationService
   ) {
     this.directionsService = new google.maps.DirectionsService();
+    this.getmessLocations();
   }
 
   ngOnInit() {
@@ -128,25 +133,41 @@ export class DashboardComponent implements OnInit {
         console.error('Error fetching user data:', error);
       }
     });
+    this.getmessLocations();
 
     // Get user location
     this.getUserLocation();
   }
 
+  getmessLocations(){
+    this.locationService.getLocations().subscribe({
+      next: (data: any) => {
+        console.log(data.data);
+        
+        this.messLocations = data.data
+      },
+      error: (error) => {
+        console.error('Error fetching user data:', error);
+      }
+    });
+  }
+
   get filteredMessLocationsByNameAndCity(): Location[] {
+
     if (this.selectedCity === 'All') {
       const query = this.messNameSearchQuery.toLowerCase().trim();
       return this.messLocations.filter(location =>
         location.name.toLowerCase().includes(query)
       );
     }
-    return this.messLocations.filter(location => {
+    let data = this.messLocations.filter(location => {
       const matchesCity = this.selectedCity ? location.city === this.selectedCity : true;
       const matchesName = this.messNameSearchQuery
         ? location.name.toLowerCase().includes(this.messNameSearchQuery.toLowerCase().trim())
         : true;
       return matchesCity && matchesName;
     });
+    return data;
   }
 
   getUserLocation() {
@@ -260,5 +281,13 @@ export class DashboardComponent implements OnInit {
   selectLocation(location: Location) {
     console.log('Location selected:', location);
     this.selectedLocation = { ...location };
+    
+    // Scroll to menu section after a short delay to ensure component is rendered
+    setTimeout(() => {
+      const menuSection = document.getElementById('menu-section');
+      if (menuSection) {
+        menuSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   }
 }

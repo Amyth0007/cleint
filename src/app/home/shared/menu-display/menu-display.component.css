@@ -1,0 +1,140 @@
+.menu-container {
+  padding: 2rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.menu-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.menu-items-scroll {
+  overflow-x: auto;
+  padding: 1rem 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #10b981 #f0fdf4;
+  margin-bottom: 1rem;
+}
+
+.menu-items-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.menu-items-scroll::-webkit-scrollbar-track {
+  background: #f0fdf4;
+  border-radius: 4px;
+}
+
+.menu-items-scroll::-webkit-scrollbar-thumb {
+  background: #10b981;
+  border-radius: 4px;
+}
+
+.menu-items-row {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.5rem;
+  min-width: min-content;
+}
+
+.menu-item-card {
+  background: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.menu-item-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.menu-item-content {
+  padding: 1rem;
+}
+
+.price-tag {
+  background: #059669;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.veg-indicator {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #22c55e;
+  border-radius: 4px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.veg-indicator.non-veg {
+  border-color: #ef4444;
+}
+
+.veg-indicator .inner-circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+.veg-indicator.non-veg .inner-circle {
+  background: #ef4444;
+}
+
+.spicy-level {
+  display: flex;
+  gap: 2px;
+}
+
+.chili-icon {
+  font-size: 0.875rem;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+  .menu-container {
+    padding: 1.5rem 1rem;
+    margin-bottom: 3rem;
+    border-radius: 0.75rem;
+  }
+
+  .menu-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .menu-items-scroll {
+    padding: 0.5rem 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .menu-item-card {
+    width: 260px;
+  }
+
+  .menu-item-image {
+    height: 180px;
+  }
+} 

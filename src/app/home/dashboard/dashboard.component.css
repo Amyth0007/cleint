@@ -69,6 +69,7 @@
 .dashboard-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  padding-bottom: 2rem;
 }
 
 .dashboard-content {
@@ -105,6 +106,9 @@
   .dashboard-content {
     padding: 6rem 1rem 2rem;
   }
+  .dashboard-container {
+    padding-bottom: 3rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -113,5 +117,8 @@
   }
   .welcome-section{
     padding-top: 2rem;
+  }
+  .dashboard-container {
+    padding-bottom: 4rem;
   }
 }
