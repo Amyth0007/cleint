@@ -1,16 +1,17 @@
 // dashboard.component.ts
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Location } from 'src/app/auth/interfaces/location.interface';
+import { UserData } from 'src/app/auth/interfaces/user.interface';
 import { LocationService } from 'src/app/services/location.service';
 import { AuthService } from '../../auth/services/auth-service/auth.service';
 import { UserService } from '../../services/user.service';
+import { LocationPermissionPopupComponent } from '../shared/location-permission-popup/location-permission-popup.component';
 import { MapComponent } from '../shared/map/map.component';
 import { MenuDisplayComponent } from '../shared/menu-display/menu-display.component';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
-import { UserData } from 'src/app/auth/interfaces/user.interface';
-import { Location } from 'src/app/auth/interfaces/location.interface';
-import { FormsModule } from '@angular/forms';
 declare var google: any;
 
 
@@ -22,7 +23,7 @@ declare var google: any;
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, NavbarComponent, MapComponent, MenuDisplayComponent, FormsModule]
+  imports: [CommonModule, RouterLink, RouterLinkActive, NavbarComponent, MapComponent, MenuDisplayComponent, FormsModule, LocationPermissionPopupComponent]
 })
 export class DashboardComponent implements OnInit {
   userData: UserData | null = null;
@@ -32,6 +33,8 @@ export class DashboardComponent implements OnInit {
   selectedCity: string = 'All';
   topCities: string[] = ['All', 'Pune', 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Chennai'];
   messNameSearchQuery: string = '';
+  showLocationPopup: boolean = false;
+  userCity: string | null = null;
 
   messLocations: Location[] = []
   // [
@@ -126,7 +129,6 @@ export class DashboardComponent implements OnInit {
     this.userService.getUserData().subscribe({
       next: (data) => {
         console.log(data);
-
         this.userData = data;
       },
       error: (error) => {
@@ -135,8 +137,106 @@ export class DashboardComponent implements OnInit {
     });
     this.getmessLocations();
 
-    // Get user location
+    // Check location permission status
+    this.checkLocationPermission();
+  }
+
+  private checkLocationPermission() {
+    if (navigator.permissions && navigator.permissions.query) {
+      navigator.permissions.query({ name: 'geolocation' }).then(permissionStatus => {
+        if (permissionStatus.state === 'prompt') {
+          this.showLocationPopup = true;
+        } else if (permissionStatus.state === 'granted') {
+          this.getUserLocation();
+        }
+        
+        // Listen for changes in permission status
+        permissionStatus.addEventListener('change', () => {
+          if (permissionStatus.state === 'granted') {
+            this.showLocationPopup = false;
+            this.getUserLocation();
+          }
+        });
+      });
+    } else {
+      // If permissions API is not supported, show popup
+      this.showLocationPopup = true;
+    }
+  }
+
+  onLocationAllow() {
+    this.showLocationPopup = false;
     this.getUserLocation();
+  }
+
+  onLocationDeny() {
+    this.showLocationPopup = false;
+    // Set default location
+    this.userLocation = { lat: 18.5204, lng: 73.8567 };
+    this.updateRouteDistances();
+  }
+
+  async getUserLocation() {
+    console.log('Getting user location...');
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          console.log('User location received:', position.coords);
+          this.userLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          
+          try {
+            // Get city from coordinates using LocationIQ
+            this.userCity = await this.locationService.getCityFromCoordinates(
+              position.coords.latitude,
+              position.coords.longitude
+            );
+            console.log('City found by LocationIQ:', this.userCity);
+            
+            // Check if the found city matches any of our top cities
+            const foundCity = this.topCities.find(city => 
+              city !== 'All' && 
+              (this.userCity?.toLowerCase().includes(city.toLowerCase()) ||
+               city.toLowerCase().includes(this.userCity?.toLowerCase() || ''))
+            );
+            
+            if (foundCity) {
+              console.log('Found matching city in our list:', foundCity);
+              this.selectedCity = foundCity;
+              this.updateFilteredLocations();
+            } else {
+              console.log('No matching city found in our list. Available cities:', this.topCities.filter(city => city !== 'All'));
+              console.log('Geocoded city from LocationIQ:', this.userCity);
+              this.selectedCity = 'All';
+            }
+          } catch (error) {
+            console.error('Error getting city from LocationIQ:', error);
+            this.selectedCity = 'All';
+          }
+          
+          // Update distances based on user location
+          this.updateRouteDistances();
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+          // Set default location (e.g., city center)
+          this.userLocation = { lat: 18.5204, lng: 73.8567 };
+          this.updateRouteDistances();
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        }
+      );
+    } else {
+      console.log('Geolocation not supported, using default location');
+      // Fallback for browsers that don't support geolocation
+      this.userLocation = { lat: 18.5204, lng: 73.8567 };
+      this.updateRouteDistances();
+    }
   }
 
   getmessLocations(){
@@ -168,39 +268,6 @@ export class DashboardComponent implements OnInit {
       return matchesCity && matchesName;
     });
     return data;
-  }
-
-  getUserLocation() {
-    console.log('Getting user location...');
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          console.log('User location received:', position.coords);
-          this.userLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-          // Update distances based on user location
-          this.updateRouteDistances();
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-          // Set default location (e.g., city center)
-          this.userLocation = { lat: 18.5204, lng: 73.8567 };
-          this.updateRouteDistances();
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0
-        }
-      );
-    } else {
-      console.log('Geolocation not supported, using default location');
-      // Fallback for browsers that don't support geolocation
-      this.userLocation = { lat: 18.5204, lng: 73.8567 };
-      this.updateRouteDistances();
-    }
   }
 
   async updateRouteDistances() {
@@ -289,5 +356,15 @@ export class DashboardComponent implements OnInit {
         menuSection.scrollIntoView({ behavior: 'smooth' });
       }
     }, 100);
+  }
+
+  // Add a method to handle city selection changes
+  onCityChange() {
+    this.updateFilteredLocations();
+  }
+
+  private updateFilteredLocations() {
+    // This will trigger the getter to update the filtered locations
+    this.messLocations = [...this.messLocations];
   }
 }
