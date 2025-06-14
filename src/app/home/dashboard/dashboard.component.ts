@@ -149,7 +149,7 @@ export class DashboardComponent implements OnInit {
         } else if (permissionStatus.state === 'granted') {
           this.getUserLocation();
         }
-        
+
         // Listen for changes in permission status
         permissionStatus.addEventListener('change', () => {
           if (permissionStatus.state === 'granted') {
@@ -186,7 +186,7 @@ export class DashboardComponent implements OnInit {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           };
-          
+
           try {
             // Get city from coordinates using LocationIQ
             this.userCity = await this.locationService.getCityFromCoordinates(
@@ -194,14 +194,14 @@ export class DashboardComponent implements OnInit {
               position.coords.longitude
             );
             console.log('City found by LocationIQ:', this.userCity);
-            
+
             // Check if the found city matches any of our top cities
-            const foundCity = this.topCities.find(city => 
-              city !== 'All' && 
+            const foundCity = this.topCities.find(city =>
+              city !== 'All' &&
               (this.userCity?.toLowerCase().includes(city.toLowerCase()) ||
                city.toLowerCase().includes(this.userCity?.toLowerCase() || ''))
             );
-            
+
             if (foundCity) {
               console.log('Found matching city in our list:', foundCity);
               this.selectedCity = foundCity;
@@ -215,7 +215,7 @@ export class DashboardComponent implements OnInit {
             console.error('Error getting city from LocationIQ:', error);
             this.selectedCity = 'All';
           }
-          
+
           // Update distances based on user location
           this.updateRouteDistances();
         },
@@ -243,7 +243,7 @@ export class DashboardComponent implements OnInit {
     this.locationService.getLocations().subscribe({
       next: (data: any) => {
         console.log(data.data);
-        
+
         this.messLocations = data.data
       },
       error: (error) => {
@@ -348,7 +348,7 @@ export class DashboardComponent implements OnInit {
   selectLocation(location: Location) {
     console.log('Location selected:', location);
     this.selectedLocation = { ...location };
-    
+
     // Scroll to menu section after a short delay to ensure component is rendered
     setTimeout(() => {
       const menuSection = document.getElementById('menu-section');

@@ -1,52 +1,38 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../../auth/services/auth-service/auth.service";
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthInputComponent } from 'src/app/auth/shared/auth-input/auth-input.component';
+import { AuthButtonComponent } from 'src/app/auth/shared/auth-button/auth-button.component';
+import { NavbarComponent } from '../shared/navbar/navbar.component';
 
 @Component({
   selector: 'app-profile',
-  template: `
-    <div class="dashboard-content">
-      <div class="max-w-3xl mx-auto">
-        <h2 class="text-3xl font-bold text-orange-700 mb-6">My Profile</h2>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <div class="flex items-center space-x-4 mb-6">
-            <div class="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center">
-              <span class="text-2xl text-orange-500">{{ getInitials() }}</span>
-            </div>
-            <div>
-              <h3 class="text-xl font-semibold">{{ currentUser?.name || 'User' }}</h3>
-              <p class="text-gray-600">{{ currentUser?.email }}</p>
-            </div>
-          </div>
-
-          <div class="space-y-4">
-            <div class="border-t pt-4">
-              <h4 class="text-lg font-medium text-orange-600 mb-2">Account Details</h4>
-              <p class="text-gray-600">Member since: {{ currentUser?.createdAt | date }}</p>
-            </div>
-
-            <div class="border-t pt-4">
-              <h4 class="text-lg font-medium text-orange-600 mb-2">Preferences</h4>
-              <p class="text-gray-600">Meal Plan: Standard</p>
-              <p class="text-gray-600">Dietary Restrictions: None</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
+  templateUrl: './profile.component.html',
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, ReactiveFormsModule, AuthInputComponent, AuthButtonComponent, FormsModule,NavbarComponent]
 })
 export class ProfileComponent implements OnInit {
+  profileForm!: FormGroup;
   currentUser: any;
+  genderOptions = ['Male', 'Female', 'Other', 'Prefer not to say'];
 
-  constructor(private authService: AuthService) {}
+
+  constructor(private authService: AuthService, private fb: FormBuilder) { }
 
   ngOnInit() {
     this.currentUser = this.authService.currentUserValue;
+    this.profileForm = this.fb.group({
+      name: [this.currentUser?.name || '', Validators.required],
+      email: [this.currentUser?.email || '', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      age: [this.currentUser?.age || '', Validators.required],
+      gender: [this.currentUser?.gender || '', Validators.required]
+    });
   }
-
+  get genderControl(): FormControl {
+    return this.profileForm.get('gender') as FormControl;
+  }
   getInitials(): string {
     if (!this.currentUser?.name) return 'U';
     return this.currentUser.name
@@ -54,5 +40,13 @@ export class ProfileComponent implements OnInit {
       .map((n: string) => n[0])
       .join('')
       .toUpperCase();
+  }
+  onUpdateProfile() {
+    if (this.profileForm.valid) {
+      const updatedProfile = this.profileForm.value;
+      console.log('Updated Profile:', updatedProfile);
+
+      // TODO: Send to API or update local storage/session
+    }
   }
 }
