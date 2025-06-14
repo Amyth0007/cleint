@@ -4,8 +4,22 @@
   <main class="dashboard-content">
     <div class="welcome-section">
       <h1 class="text-3xl font-bold text-emerald-800">Welcome back, {{ userData?.name }}! 👋</h1>
-      <p class="text-emerald-600 mt-2">Select your preferred mess location</p>
+      <p class="text-emerald-600 mt-2">
+        <ng-container *ngIf="userCity">
+          Showing messes near {{ userCity }}
+        </ng-container>
+        <ng-container *ngIf="!userCity">
+          Select your preferred mess location
+        </ng-container>
+      </p>
     </div>
+
+    <!-- Location Permission Popup -->
+    <app-location-permission-popup
+      *ngIf="showLocationPopup"
+      (allow)="onLocationAllow()"
+      (deny)="onLocationDeny()">
+    </app-location-permission-popup>
 
     <div class="flex flex-col lg:flex-row gap-6 mt-8">
       <!-- Mess Locations -->
@@ -16,7 +30,7 @@
           <!-- <h2 class="text-2xl font-bold text-emerald-800">Available Locations</h2> -->
           <input type="text" [(ngModel)]="messNameSearchQuery" placeholder="Search mess by name"
             class="border border-emerald-300 text-emerald-700 rounded-md px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-          <select [(ngModel)]="selectedCity"
+          <select [(ngModel)]="selectedCity" (ngModelChange)="onCityChange()"
             class="border border-emerald-300 text-emerald-700 rounded-md px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
             <option *ngFor="let city of topCities" [value]="city">{{ city }}</option>
           </select>
