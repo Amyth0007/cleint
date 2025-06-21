@@ -10,6 +10,7 @@ import { AuthSeparatorComponent } from "../shared/auth-separator/auth-separator.
 import { AuthSocialButtonComponent } from "../shared/auth-social-button/auth-social-button.component";
 import { ToastrService } from 'ngx-toastr';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { SnackBarService } from 'src/app/services/snack-bar.service';
 
 @Component({
   selector: 'app-login',
@@ -38,7 +39,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private snackBar: MatSnackBar
+    private snackBarService: SnackBarService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -51,20 +52,6 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  showSuccess() {
-    this.snackBar.open('✅ Login successful!', 'Close', {
-  duration: 3000,
-  panelClass: ['snackbar-success']
-});
-  }
-
-  showError() {
-    this.snackBar.open('❌ Invalid email or password.', 'Close', {
-  duration: 3000,
-  panelClass: ['snackbar-error']
-});
-  }
-
   onSubmit() {
     if (this.loginForm.valid) {
       this.isLoading = true;
@@ -75,15 +62,15 @@ export class LoginComponent implements OnInit {
       this.authService.login(email, password).subscribe({
         next: (response) => {
           if (response.success) {
-            this.showSuccess();
+            this.snackBarService.showSuccess('✅ Login successful!');
             setTimeout(() => {
               this.router.navigate([this.returnUrl]);
             }, 500);
           }
         },
         error: (error) => {
-            this.errorMessage = error.message || 'Login failed. Please try again.';
-            this.showError();
+          this.errorMessage = error.message || 'Login failed. Please try again.';
+          this.snackBarService.showError('❌ Invalid email or password.');
           this.errorMessage = error.error?.message || 'Login failed. Please try again.';
           this.isLoading = false;
         },

@@ -62,6 +62,15 @@ export class AuthService {
       );
   }
 
+  updateProfile(payload: any): Observable<any> {
+    return this.http.put(`${this.API_URL}/update-profile`, payload, {
+      headers: {
+        Authorization: `Bearer ${this.currentUserValue.token}`
+      }
+    });
+  }
+
+
   logout() {
     // remove user from local storage and set current user to null
     localStorage.removeItem('currentUser');

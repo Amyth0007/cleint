@@ -1,48 +1,33 @@
 <app-auth-layout title="Create your account">
   <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-6">
-    <app-auth-input
-      label="Full Name"
-      type="text"
-      placeholder="Enter your full name"
-      [control]="signupForm.controls['username']"
-    ></app-auth-input>
+    <app-auth-input label="Full Name" type="text" placeholder="Enter your full name"
+      [control]="signupForm.controls['username']"></app-auth-input>
 
-    <app-auth-input
-      label="Email"
-      type="email"
-      placeholder="Enter your email"
-      [control]="signupForm.controls['email']"
-    ></app-auth-input>
+    <app-auth-input label="Email" type="email" placeholder="Enter your email"
+      [control]="signupForm.controls['email']"></app-auth-input>
 
-    <app-auth-input
-      label="Password"
-      type="password"
-      placeholder="Create a password"
-      [control]="signupForm.controls['password']"
-    ></app-auth-input>
+    <div *ngIf="signupForm.get('email')?.hasError('emailExists')" class="text-red-500 text-sm">
+      This email is already registered. Try logging in instead.
+    </div>
+    
+    <app-auth-input label="Password" type="password" placeholder="Create a password"
+      [control]="signupForm.controls['password']"></app-auth-input>
 
-    <app-auth-input
-      label="Confirm Password"
-      type="password"
-      placeholder="Confirm your password"
-      [control]="signupForm.controls['confirmPassword']"
-    ></app-auth-input>
+    <app-auth-input label="Confirm Password" type="password" placeholder="Confirm your password"
+      [control]="signupForm.controls['confirmPassword']"></app-auth-input>
 
-    <div *ngIf="passwordMismatch" class="text-red-500 text-sm">
+    <div *ngIf="signupForm.get('confirmPassword')?.hasError('mismatch') && signupForm.get('confirmPassword')?.touched"
+      class="text-red-500 text-sm">
       Passwords do not match
     </div>
 
     <div class="space-y-4">
-      <app-auth-button 
-        [text]="isLoading ? 'Creating account...' : 'Sign Up'"
-        [onClick]="onSubmit.bind(this)"
-      ></app-auth-button>
+      <app-auth-button [text]="isLoading ? 'Creating account...' : 'Sign Up'"
+        [onClick]="onSubmit.bind(this)"></app-auth-button>
 
       <p class="text-center text-sm text-gray-600">
         Already have an account?
-        <a 
-          routerLink="/login" 
-          class="text-orange-600 hover:text-orange-800">
+        <a routerLink="/login" class="text-orange-600 hover:text-orange-800">
           Login
         </a>
       </p>
