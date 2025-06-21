@@ -8,6 +8,8 @@ import { AuthInputComponent } from '../shared/auth-input/auth-input.component';
 import { AuthLayoutComponent } from '../shared/auth-layout/auth-layout.component';
 import { AuthSeparatorComponent } from "../shared/auth-separator/auth-separator.component";
 import { AuthSocialButtonComponent } from "../shared/auth-social-button/auth-social-button.component";
+import { passwordMatchValidator } from '../shared/validators/password-match.validator';
+import { SnackBarService } from 'src/app/services/snack-bar.service';
 
 @Component({
   selector: 'app-signup',
@@ -34,27 +36,25 @@ export class SignupComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private snackBarService: SnackBarService
+
   ) {
     this.signupForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
-    }, { validator: this.passwordMatchValidator });
+    }, { validator: passwordMatchValidator });
   }
 
-  passwordMatchValidator(g: FormGroup) {
-    return g.get('password')?.value === g.get('confirmPassword')?.value
-      ? null
-      : { mismatch: true };
-  }
+
 
   onSubmit() {
     if (this.signupForm.hasError('mismatch')) {
-        this.passwordMismatch = true;
-        this.isLoading = false;
-        return;
-      }
+      this.passwordMismatch = true;
+      this.isLoading = false;
+      return;
+    }
     if (this.signupForm.valid) {
       this.isLoading = true;
       this.errorMessage = '';
@@ -66,14 +66,24 @@ export class SignupComponent {
         next: (response) => {
           if (response.success) {
             // this.toastr.success(response.message, 'Success');
-            this.router.navigate(['/']);
+            this.snackBarService.showSuccess('🎉 Account created!');
+            setTimeout(() => {
+              this.router.navigate(['/']);
+            }, 500);
           } else {
             this.errorMessage = response.message || 'Signup failed. Please try again.';
+            this.snackBarService.showError('⚠️ Email already exists!');
             // this.toastr.error(response.message, 'Error');
           }
         },
         error: (error) => {
-          this.errorMessage = error.error?.message || 'Signup failed. Please try again.';
+          // this.errorMessage = error.error?.message || 'Signup failed. Please try again.';
+          if (error.error?.message === 'User already exists') {
+            this.signupForm.get('email')?.setErrors({ emailExists: true });
+            this.snackBarService.showError('⚠️ Email already exists!');
+          } else {
+            // Handle other errors, optional
+          }
           this.isLoading = false;
         },
         complete: () => {
