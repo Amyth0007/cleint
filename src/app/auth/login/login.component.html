@@ -1,4 +1,5 @@
-<app-auth-layout title="Log In">
+<app-auth-layout [title]="'Log In'">
+
     <form [formGroup]="loginForm" class="space-y-4">
         <app-auth-input label="Email" placeholder="Email" type="email" [control]="loginForm.controls['email']" />
         <app-auth-input label="Password" placeholder="Password" type="password"
@@ -10,12 +11,22 @@
         Forgot password?
     </span>
     <app-auth-separator></app-auth-separator>
+        <div class="mt-6">
+        <a routerLink="/mess-owner/login" 
+           class="block w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-sm text-center transition-colors">
+            Login as Mess Owner
+        </a>
+    </div>
     <app-auth-social-button iconUrl="icons/google.svg" text="Log In with Google" [onClick]="logInWithGoogle" />
 
     <app-auth-social-button iconUrl="icons/facebook.svg" text="Log In with Facebook" [onClick]="logInWithFacebook" />
 
     <div class="text-center text-sm mt-6">
         New to <span class="text-orange-600 font-bold">MessMate</span>?
-        <a routerLink="/signup" class="text-black font-bold underline cursor-pointer">Sign Up</a>
+        <a [routerLink]="isMessOwnerLogin ? '/mess-owner/signup' : '/signup'" class="text-black font-bold underline cursor-pointer">
+            Sign Up as {{ isMessOwnerLogin ? 'Mess Owner' : 'User' }}
+        </a>
     </div>
+
+
 </app-auth-layout>

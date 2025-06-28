@@ -4,6 +4,34 @@
     <p class="text-emerald-600">Explore our delicious offerings</p>
   </div>
 
+  <!-- Head Count Section -->
+  <div class="head-count-section">
+    <label for="headCount" class="head-count-label">Number of People:</label>
+    <div class="head-count-controls">
+      <button 
+        type="button" 
+        class="quantity-btn"
+        (click)="decreaseHeadCount()"
+        [disabled]="headCount <= 1">
+        -
+      </button>
+      <input 
+        type="number" 
+        id="headCount"
+        [(ngModel)]="headCount" 
+        min="1" 
+        max="20"
+        class="head-count-input">
+      <button 
+        type="button" 
+        class="quantity-btn"
+        (click)="increaseHeadCount()"
+        [disabled]="headCount >= 20">
+        +
+      </button>
+    </div>
+  </div>
+
   <div class="menu-items-scroll">
     <div class="menu-items-row">
       <div *ngFor="let item of menuItems" class="menu-item-card">
@@ -33,8 +61,82 @@
                     class="chili-icon">🌶️</span>
             </div>
           </div>
+
+          <!-- Item Selection Controls -->
+          <div class="item-selection mt-3">
+            <div class="quantity-controls">
+              <button 
+                type="button" 
+                class="quantity-btn"
+                (click)="updateItemQuantity(item.id, getItemQuantity(item.id) - 1)"
+                [disabled]="getItemQuantity(item.id) <= 0">
+                -
+              </button>
+              <span class="quantity-display">{{getItemQuantity(item.id)}}</span>
+              <button 
+                type="button" 
+                class="quantity-btn"
+                (click)="updateItemQuantity(item.id, getItemQuantity(item.id) + 1)">
+                +
+              </button>
+            </div>
+            <div class="item-total" *ngIf="getItemQuantity(item.id) > 0">
+              Total: ₹{{item.price * getItemQuantity(item.id)}}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div> 
+
+  <!-- Order Summary and Share Intent -->
+  <div class="order-summary" *ngIf="hasSelectedItems()">
+    <div class="summary-header">
+      <h3 class="text-xl font-semibold text-emerald-800">Order Summary</h3>
+    </div>
+    
+    <div class="selected-items">
+      <div *ngFor="let selectedItem of getSelectedItemsWithDetails()" class="selected-item">
+        <span class="item-name">{{selectedItem.item.name}}</span>
+        <span class="item-quantity">x{{selectedItem.quantity}}</span>
+        <span class="item-price">₹{{selectedItem.item.price * selectedItem.quantity}}</span>
+      </div>
+    </div>
+    
+    <div class="summary-totals">
+      <div class="total-row">
+        <span>Subtotal:</span>
+        <span>₹{{getTotalAmount()}}</span>
+      </div>
+      <div class="total-row">
+        <span>Head Count:</span>
+        <span>{{headCount}} person(s)</span>
+      </div>
+      <div class="total-row final-total">
+        <span>Total Amount:</span>
+        <span>₹{{getTotalAmount()}}</span>
+      </div>
+    </div>
+    
+    <div class="share-intent-section">
+      <button 
+        type="button" 
+        class="share-intent-btn"
+        [disabled]="isSharingIntent"
+        (click)="shareIntent()">
+        <span *ngIf="!isSharingIntent">🍽️ Share Intent with {{messName}}</span>
+        <span *ngIf="isSharingIntent">⏳ Sharing Intent...</span>
+      </button>
+      <p class="intent-description">
+        Let the mess owner know you're coming with your selected items!
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Success Popup -->
+<app-success-popup
+  [data]="successPopupData"
+  [isVisible]="showSuccessPopup"
+  (close)="closeSuccessPopup()">
+</app-success-popup> 

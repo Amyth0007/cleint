@@ -8,5 +8,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './auth-separator.component.css'
 })
 export class AuthSeparatorComponent {
-  @Input() margin: string = 'my-6 mb-20'; // default
+  @Input() margin: string = 'my-6 mb-7'; // default
 }

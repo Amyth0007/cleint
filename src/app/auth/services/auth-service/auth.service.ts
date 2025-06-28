@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthResponse } from '../../interfaces/auth.interface';
-
+import { MessOwner } from '../../interfaces/mess-owner.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +27,24 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
+    return this.http.post<AuthResponse>(`${this.API_URL}/login`, { email, password })
+      .pipe(
+        map(response => {
+          if (response.success && response.data.token) {
+            // store user details and jwt token in local storage
+            const user = {
+              ...response.data.user,
+              token: response.data.token
+            };
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            this.currentUserSubject.next(user);
+          }
+          return response;
+        })
+      );
+  }
+
+  loginMessOwner(email: string, password: string) {
     return this.http.post<AuthResponse>(`${this.API_URL}/login`, { email, password })
       .pipe(
         map(response => {
@@ -71,6 +89,24 @@ export class AuthService {
   }
 
 
+  signupMessOwner(messOwnerData: { username: string; email: string; password: string }) {
+    return this.http.post<AuthResponse>(`${this.API_URL}/signup`, messOwnerData)
+      .pipe(
+        map(response => {
+          if (response.success && response.data.token) {
+            // store user details and jwt token in local storage
+            const user = {
+              ...response.data.user,
+              token: response.data.token
+            };
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            this.currentUserSubject.next(user);
+          }
+          return response;
+        })
+      );
+  }
+
   logout() {
     // remove user from local storage and set current user to null
     localStorage.removeItem('currentUser');
@@ -80,6 +116,13 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return !!this.currentUserValue;
+  }
+
+  isMessOwner(): boolean {
+    // return true;
+    console.log("current user value",this.currentUserValue);
+    
+    return this.currentUserValue?.role === 'mess_owner';
   }
 
   getToken(): string | null {

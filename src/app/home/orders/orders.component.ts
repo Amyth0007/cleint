@@ -1,74 +1,104 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { OrderService, OrdersResponse, UserOrder } from '../../services/order.service';
+import { NavbarComponent } from '../shared/navbar/navbar.component';
 
 @Component({
   selector: 'app-orders',
-  template: `
-    <div class="dashboard-content">
-      <div class="max-w-7xl mx-auto">
-        <h2 class="text-3xl font-bold text-orange-700 mb-6">My Orders</h2>
-        
-        <div class="grid grid-cols-1 gap-6">
-          <!-- Sample Orders -->
-          <div class="bg-white p-6 rounded-lg shadow-md" *ngFor="let order of orders">
-            <div class="flex justify-between items-start">
-              <div>
-                <h3 class="text-xl font-semibold text-orange-600">{{ order.date }}</h3>
-                <p class="text-gray-600 mt-2">{{ order.items.join(', ') }}</p>
-              </div>
-              <span [class]="getStatusClass(order.status)">
-                {{ order.status }}
-              </span>
-            </div>
-            <div class="mt-4 flex justify-between items-center border-t pt-4">
-              <p class="text-gray-600">Total Amount: ₹{{ order.amount }}</p>
-              <button 
-                class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
-                *ngIf="order.status === 'Pending'">
-                Cancel Order
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
+  templateUrl: './orders.component.html',
+  styleUrls: ['./orders.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, RouterLink, NavbarComponent]
 })
-export class OrdersComponent {
-  orders = [
-    {
-      date: 'Today',
-      items: ['Roti', 'Dal', 'Rice', 'Paneer Curry'],
-      status: 'Active',
-      amount: 120
-    },
-    {
-      date: 'Tomorrow',
-      items: ['Roti', 'Dal', 'Rice', 'Chicken Curry'],
-      status: 'Pending',
-      amount: 150
-    },
-    {
-      date: 'Yesterday',
-      items: ['Roti', 'Dal', 'Rice', 'Mix Veg'],
-      status: 'Completed',
-      amount: 100
-    }
-  ];
+export class OrdersComponent implements OnInit {
+  orders: UserOrder[] = [];
+  isLoading: boolean = true;
+  hasError: boolean = false;
+  errorMessage: string = '';
 
-  getStatusClass(status: string): string {
-    const baseClasses = 'px-3 py-1 rounded-full text-sm font-medium';
-    switch (status.toLowerCase()) {
-      case 'active':
-        return `${baseClasses} bg-green-100 text-green-800`;
-      case 'pending':
-        return `${baseClasses} bg-yellow-100 text-yellow-800`;
-      case 'completed':
-        return `${baseClasses} bg-gray-100 text-gray-800`;
-      default:
-        return baseClasses;
+  constructor(private orderService: OrderService) {}
+
+  ngOnInit() {
+    this.loadOrders();
+  }
+
+  loadOrders() {
+    this.isLoading = true;
+    this.hasError = false;
+    
+    this.orderService.getUserOrders().subscribe({
+      next: (response: OrdersResponse) => {
+        this.orders = response.data;
+        this.isLoading = false;
+        console.log(this.orders);
+      },
+      error: (error) => {
+        console.error('Failed to load intents:', error);
+        this.hasError = true;
+        this.errorMessage = 'Failed to load your intents. Please try again.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  getOrderDate(timestamp: string): string {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffTime = Math.abs(now.getTime() - date.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  }
+
+  getOrderTime(timestamp: string): string {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  getTotalItems(order: UserOrder): number {
+    return order.selectedItems.reduce((total, item) => total + item.quantity, 0);
+  }
+
+  getOrderId(order: UserOrder): string {
+    // Generate a simple ID from timestamp and messId for display
+    const date = new Date(order.timestamp);
+    const timeStr = date.getTime().toString().slice(-6);
+    return `${order.messId}-${timeStr}`;
+  }
+
+  retryLoad() {
+    this.loadOrders();
+  }
+
+  trackByOrderId(index: number, order: UserOrder): string {
+    const date = new Date(order.timestamp);
+    const timeStr = date.getTime().toString().slice(-6);
+    return `${order.messId}-${timeStr}`;
+  }
+
+  viewOrderDetails(order: UserOrder) {
+    console.log('Viewing intent details:', order);
+    // TODO: Implement intent details view
+    alert(`Intent Details for ${order.messName}\nIntent ID: ${this.getOrderId(order)}\nTotal Amount: ₹${order.totalAmount}`);
+  }
+
+  cancelOrder(order: UserOrder) {
+    console.log('Cancelling intent:', order);
+    // TODO: Implement intent cancellation
+    if (confirm(`Are you sure you want to cancel your intent for ${order.messName}?`)) {
+      alert('Intent cancellation feature will be implemented soon!');
     }
   }
 } 

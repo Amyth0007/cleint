@@ -1,0 +1,96 @@
+<app-navbar></app-navbar>
+
+<div class="orders-container">
+  <div class="orders-header">
+    <div class="header-content">
+      <h1 class="page-title">My Intents</h1>
+      <p class="page-subtitle">Track your mess intents and shared preferences</p>
+    </div>
+  </div>
+
+  <div class="orders-content">
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="isLoading">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading your intents...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-container" *ngIf="hasError">
+      <div class="error-icon">⚠️</div>
+      <h3 class="error-title">Oops! Something went wrong</h3>
+      <p class="error-message">{{ errorMessage }}</p>
+      <button class="retry-btn" (click)="retryLoad()">
+        🔄 Try Again
+      </button>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-container" *ngIf="!isLoading && !hasError && orders.length === 0">
+      <div class="empty-icon">📋</div>
+      <h3 class="empty-title">No Intents Yet</h3>
+      <p class="empty-message">You haven't shared any intents with mess owners yet.</p>
+      <a routerLink="/home" class="browse-btn">
+        🍽️ Browse Messes
+      </a>
+    </div>
+
+    <!-- Intents List -->
+    <div class="orders-list" *ngIf="!isLoading && !hasError && orders.length > 0">
+      <div class="order-card" *ngFor="let order of orders; trackBy: trackByOrderId">
+        <div class="order-header">
+          <div class="order-info">
+            <h3 class="mess-name">{{ order.messName }}</h3>
+            <div class="order-meta">
+              <span class="order-date">{{ getOrderDate(order.timestamp) }}</span>
+              <span class="order-time">{{ getOrderTime(order.timestamp) }}</span>
+              <span class="order-id">#{{ getOrderId(order) }}</span>
+            </div>
+          </div>
+          <div class="intent-badge">
+            <span class="intent-label">Intent Shared</span>
+          </div>
+        </div>
+
+        <div class="order-details">
+          <div class="items-section">
+            <h4 class="section-title">Selected Items</h4>
+            <div class="items-list">
+              <div class="item-row" *ngFor="let selectedItem of order.selectedItems">
+                <div class="item-info">
+                  <span class="item-name">{{ selectedItem.itemName }}</span>
+                  <span class="item-quantity">×{{ selectedItem.quantity }}</span>
+                </div>
+                <span class="item-price">₹{{ selectedItem.pricePerUnit }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-summary">
+            <div class="summary-row">
+              <span class="summary-label">Head Count:</span>
+              <span class="summary-value">{{ order.headCount }} person(s)</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Total Items:</span>
+              <span class="summary-value">{{ getTotalItems(order) }} items</span>
+            </div>
+            <div class="summary-row total-row">
+              <span class="summary-label">Total Amount:</span>
+              <span class="summary-value total-amount">₹{{ order.totalAmount }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-actions">
+          <button class="action-btn view-btn" (click)="viewOrderDetails(order)">
+            👁️ View Details
+          </button>
+          <button class="action-btn cancel-btn" (click)="cancelOrder(order)">
+            ❌ Cancel Intent
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

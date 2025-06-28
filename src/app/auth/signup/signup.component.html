@@ -1,17 +1,25 @@
-<app-auth-layout title="Create your account">
-  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-6">
-    <app-auth-input label="Full Name" type="text" placeholder="Enter your full name"
-      [control]="signupForm.controls['username']"></app-auth-input>
+<app-auth-layout title="Sign Up">
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-4">
+    <app-auth-input
+      label="Name"
+      placeholder="Enter your name"
+      type="text"
+      [control]="signupForm.controls['username']"
+    ></app-auth-input>
 
-    <app-auth-input label="Email" type="email" placeholder="Enter your email"
-      [control]="signupForm.controls['email']"></app-auth-input>
+    <app-auth-input
+      label="Email"
+      placeholder="Enter your email"
+      type="email"
+      [control]="signupForm.controls['email']"
+    ></app-auth-input>
 
-    <div *ngIf="signupForm.get('email')?.hasError('emailExists')" class="text-red-500 text-sm">
-      This email is already registered. Try logging in instead.
-    </div>
-    
-    <app-auth-input label="Password" type="password" placeholder="Create a password"
-      [control]="signupForm.controls['password']"></app-auth-input>
+    <app-auth-input
+      label="Password"
+      placeholder="Enter your password"
+      type="password"
+      [control]="signupForm.controls['password']"
+    ></app-auth-input>
 
     <app-auth-input label="Confirm Password" type="password" placeholder="Confirm your password"
       [control]="signupForm.controls['confirmPassword']"></app-auth-input>
@@ -22,20 +30,24 @@
     </div>
 
     <div class="space-y-4">
-      <app-auth-button [text]="isLoading ? 'Creating account...' : 'Sign Up'"
-        [onClick]="onSubmit.bind(this)"></app-auth-button>
-
-      <p class="text-center text-sm text-gray-600">
-        Already have an account?
-        <a routerLink="/login" class="text-orange-600 hover:text-orange-800">
-          Login
-        </a>
-      </p>
+      <app-auth-button 
+        [text]="isLoading ? 'Signing up...' : 'Sign Up'"
+        [onClick]="onSubmit.bind(this)"
+      ></app-auth-button>
     </div>
   </form>
 
   <app-auth-separator></app-auth-separator>
-  <app-auth-social-button iconUrl="icons/google.svg" text="Sign up with Google" [onClick]="signUpWithGoogle" />
+    <div class="block w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-sm text-center transition-colors">
+    <a routerLink="/mess-owner/signup" class="text-gray-600 hover:text-gray-800">Sign Up as Mess Owner</a>
+  </div>
+  <app-auth-social-button iconUrl="icons/google.svg" text="Sign Up with Google" [onClick]="signUpWithGoogle" />
+  <app-auth-social-button iconUrl="icons/facebook.svg" text="Sign Up with Facebook" [onClick]="signUpWithFacebook" />
 
-  <app-auth-social-button iconUrl="icons/facebook.svg" text="Sign up with Facebook" [onClick]="signUpWithFacebook" />
+  <div class="text-center text-sm mt-6">
+    Already have an account?
+    <a routerLink="/login" class="text-black font-bold underline cursor-pointer">Log In</a>
+  </div>
+
+
 </app-auth-layout>

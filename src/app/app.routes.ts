@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './auth.guard';
+import { MessOwnerGuard } from './auth/mess-owner.guard';
 
 export const routes: Routes = [
     {
@@ -39,5 +40,27 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./home/orders/orders.component').then((m) => m.OrdersComponent),
         canActivate: [AuthGuard]
+    },
+    // Mess Owner Routes
+    {
+        path: 'mess-owner',
+        children: [
+            {
+                path: 'login',
+                loadComponent: () =>
+                  import('./auth/mess-owner/login/login.component').then((m) => m.MessOwnerLoginComponent),
+            },
+            {
+                path: 'dashboard',
+                loadComponent: () =>
+                  import('./home/mess-owner/dashboard/dashboard.component').then((m) => m.MessOwnerDashboardComponent),
+                canActivate: [MessOwnerGuard]
+            },
+            {
+                path: 'signup',
+                loadComponent: () =>
+                  import('./auth/mess-owner/messsownersignup/messsownersignup.component').then((m) => m.MesssownersignupComponent),
+            }
+        ]
     }
 ];

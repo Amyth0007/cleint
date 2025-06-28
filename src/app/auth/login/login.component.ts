@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth-service/auth.service';
 import { AuthButtonComponent } from '../shared/auth-button/auth-button.component';
 import { AuthInputComponent } from '../shared/auth-input/auth-input.component';
 import { AuthLayoutComponent } from '../shared/auth-layout/auth-layout.component';
 import { AuthSeparatorComponent } from "../shared/auth-separator/auth-separator.component";
 import { AuthSocialButtonComponent } from "../shared/auth-social-button/auth-social-button.component";
-import { ToastrService } from 'ngx-toastr';
-import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 
 @Component({
@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
   isLoading = false;
   errorMessage = '';
   returnUrl: string = '/';
+  isMessOwnerLogin = false;
 
   constructor(
     private fb: FormBuilder,
@@ -39,7 +40,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private snackBarService: SnackBarService
+    private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -52,6 +53,25 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
+  showSuccess() {
+    this.snackBar.open('✅ Login successful!', 'Close', {
+      duration: 3000,
+      panelClass: ['snackbar-success']
+    });
+  }
+
+  showError() {
+    this.snackBar.open('❌ Invalid email or password.', 'Close', {
+      duration: 3000,
+      panelClass: ['snackbar-error']
+    });
+  }
+
+  toggleLoginType() {
+    this.isMessOwnerLogin = !this.isMessOwnerLogin;
+    this.loginForm.reset();
+  }
+
   onSubmit() {
     if (this.loginForm.valid) {
       this.isLoading = true;
@@ -59,25 +79,45 @@ export class LoginComponent implements OnInit {
 
       const { email, password } = this.loginForm.value;
 
-      this.authService.login(email, password).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.snackBarService.showSuccess('✅ Login successful!');
-            setTimeout(() => {
-              this.router.navigate([this.returnUrl]);
-            }, 500);
+      if (this.isMessOwnerLogin) {
+        this.authService.loginMessOwner(email, password).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.showSuccess();
+              setTimeout(() => {
+                this.router.navigate(['/mess-owner/dashboard']);
+              }, 500);
+            }
+          },
+          error: (error) => {
+            this.errorMessage = error.error?.message || 'Login failed. Please try again.';
+            this.showError();
+            this.isLoading = false;
+          },
+          complete: () => {
+            this.isLoading = false;
           }
-        },
-        error: (error) => {
-          this.errorMessage = error.message || 'Login failed. Please try again.';
-          this.snackBarService.showError('❌ Invalid email or password.');
-          this.errorMessage = error.error?.message || 'Login failed. Please try again.';
-          this.isLoading = false;
-        },
-        complete: () => {
-          this.isLoading = false;
-        }
-      });
+        });
+      } else {
+        this.authService.login(email, password).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.showSuccess();
+              setTimeout(() => {
+                this.router.navigate([this.returnUrl]);
+              }, 500);
+            }
+          },
+          error: (error) => {
+            this.errorMessage = error.error?.message || 'Login failed. Please try again.';
+            this.showError();
+            this.isLoading = false;
+          },
+          complete: () => {
+            this.isLoading = false;
+          }
+        });
+      }
     }
   }
 
