@@ -78,47 +78,28 @@ export class LoginComponent implements OnInit {
       this.errorMessage = '';
 
       const { email, password } = this.loginForm.value;
-
-      if (this.isMessOwnerLogin) {
-        this.authService.loginMessOwner(email, password).subscribe({
-          next: (response) => {
-            if (response.success) {
-              this.showSuccess();
-              setTimeout(() => {
-                this.router.navigate(['/mess-owner/dashboard']);
-              }, 500);
-            }
-          },
-          error: (error) => {
-            this.errorMessage = error.error?.message || 'Login failed. Please try again.';
-            this.showError();
-            this.isLoading = false;
-          },
-          complete: () => {
-            this.isLoading = false;
+      console.log(email, password, this.isMessOwnerLogin);
+  
+      this.authService.login(email, password).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.showSuccess();
+            setTimeout(() => {
+              this.router.navigate([this.returnUrl]);
+            }, 500);
           }
-        });
-      } else {
-        this.authService.login(email, password).subscribe({
-          next: (response) => {
-            if (response.success) {
-              this.showSuccess();
-              setTimeout(() => {
-                this.router.navigate([this.returnUrl]);
-              }, 500);
-            }
-          },
-          error: (error) => {
-            this.errorMessage = error.error?.message || 'Login failed. Please try again.';
-            this.showError();
-            this.isLoading = false;
-          },
-          complete: () => {
-            this.isLoading = false;
-          }
-        });
+        },
+        error: (error) => {
+          this.errorMessage = error.error?.message || 'Login failed. Please try again.';
+          this.showError();
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+      });
       }
-    }
+    
   }
 
   logInWithGoogle = () => {

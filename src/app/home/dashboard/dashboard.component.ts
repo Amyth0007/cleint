@@ -2,7 +2,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Location } from 'src/app/auth/interfaces/location.interface';
 import { UserData } from 'src/app/auth/interfaces/user.interface';
 import { LocationService } from 'src/app/services/location.service';
@@ -23,7 +22,7 @@ declare var google: any;
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, NavbarComponent, MapComponent, MenuDisplayComponent, FormsModule, LocationPermissionPopupComponent]
+  imports: [CommonModule, NavbarComponent, MapComponent, MenuDisplayComponent, FormsModule, LocationPermissionPopupComponent]
 })
 export class DashboardComponent implements OnInit {
   userData: UserData | null = null;
@@ -124,11 +123,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     // Get user data
-    console.log('Getting user data...');
-
     this.userService.getUserData().subscribe({
       next: (data) => {
-        console.log(data);
         this.userData = data;
       },
       error: (error) => {
@@ -193,8 +189,7 @@ export class DashboardComponent implements OnInit {
               position.coords.latitude,
               position.coords.longitude
             );
-            console.log('City found by LocationIQ:', this.userCity);
-
+          
             // Check if the found city matches any of our top cities
             const foundCity = this.topCities.find(city =>
               city !== 'All' &&

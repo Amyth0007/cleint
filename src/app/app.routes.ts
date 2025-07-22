@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './auth.guard';
 import { MessOwnerGuard } from './auth/mess-owner.guard';
+import { messOwnerGuard } from './mess-owner.guard';
 
 export const routes: Routes = [
     {
@@ -43,24 +44,63 @@ export const routes: Routes = [
     },
     // Mess Owner Routes
     {
-        path: 'mess-owner',
-        children: [
+      path: 'mess-owner',
+      children: [
+        {
+          path: 'login',
+          loadComponent: () =>
+            import('./auth/mess-owner/login/login.component').then((m) => m.MessOwnerLoginComponent),
+        },
+        {
+          path: 'signup',
+          loadComponent: () =>
+            import('./auth/mess-owner/messsownersignup/messsownersignup.component').then((m) => m.MesssownersignupComponent),
+        },
+        {
+          path: 'initial-setup',
+          loadComponent: () =>
+            import('./home/mess-owner-setup/components/mess-onwner-initial/mess-onwner-initial.component').then((m) => m.MessOnwnerInitialComponent),
+        },
+        {
+          path: 'setup',
+          loadComponent: () =>
+          import('./home/mess-owner-setup/mess-owner-setup.component').then((m) => m.MessOwnerSetupComponent),
+          canActivate: [MessOwnerGuard],
+          // canActivate: [messOwnerGuard],
+          children: [
             {
-                path: 'login',
-                loadComponent: () =>
-                  import('./auth/mess-owner/login/login.component').then((m) => m.MessOwnerLoginComponent),
+              path: '',
+              redirectTo: 'dash',
+              pathMatch: 'full'
             },
             {
-                path: 'dashboard',
-                loadComponent: () =>
-                  import('./home/mess-owner/dashboard/dashboard.component').then((m) => m.MessOwnerDashboardComponent),
-                canActivate: [MessOwnerGuard]
+              path: 'dash',
+              loadComponent: () =>
+                import('./home/mess-owner-setup/components/dashboard/dashboard.component').then((m) => m.MessOwnerDashboardComponent),
             },
             {
-                path: 'signup',
-                loadComponent: () =>
-                  import('./auth/mess-owner/messsownersignup/messsownersignup.component').then((m) => m.MesssownersignupComponent),
-            }
-        ]
+              path: 'add-thali',
+              loadComponent: () =>
+                import('./home/mess-owner-setup/components/add-thali/add-thali.component').then((m) => m.AddThaliComponent),
+            },
+            {
+              path: 'view-intents',
+              loadComponent: () =>
+                import('./home/mess-owner-setup/components/view-intents/view-intents.component').then((m) => m.ViewIntentsComponent),
+            },
+            {
+              path: 'my-thalis',
+              loadComponent: () =>
+                import('./home/mess-owner-setup/components/my-thalis/my-thalis.component').then((m) => m.MyThalisComponent),
+            },
+            // {
+            //   path: 'profile',
+            //   loadComponent: () =>
+            //     import('./home/mess-owner/components/mess-owner-profile/mess-owner-profile.component').then((m) => m.MessOwnerProfileComponent),
+            // }
+          ]
+        }
+      ]
     }
+
 ];

@@ -1,0 +1,121 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #23232a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  padding: 0 32px;
+  height: 70px;
+  border-radius: 0 0 18px 18px;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.app-name {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #fbbf24;
+  letter-spacing: 1px;
+  margin-right: 32px;
+}
+
+.navbar-center {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex: 1;
+  justify-content: center;
+}
+
+.navbar-center a {
+  color: #f3f4f6;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 10px 18px;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+  background: transparent;
+}
+
+.navbar-center a.active, .navbar-center a:hover {
+  background: #fbbf24;
+  color: #23232a;
+}
+
+.navbar-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px;
+  position: relative;
+  background: #27272f;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #f3f4f6;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.profile:hover {
+  background: #fbbf24;
+  color: #23232a;
+}
+.profile-icon {
+  font-size: 1.3rem;
+}
+.dropdown-arrow {
+  font-size: 0.9rem;
+}
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: #23232a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  border-radius: 10px;
+  min-width: 150px;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+}
+.dropdown a {
+  padding: 12px 24px;
+  color: #f3f4f6;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  border-radius: 6px;
+}
+.dropdown a:hover {
+  background: #fbbf24;
+  color: #23232a;
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 12px 8px;
+    gap: 10px;
+  }
+  .navbar-center {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .app-name {
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+} 

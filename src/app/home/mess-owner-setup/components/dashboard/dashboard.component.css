@@ -1,0 +1,145 @@
+body, .dashboard-root {
+  background: #f4f6fa;
+  color: #23232a;
+  min-height: 100vh;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+.dashboard-root {
+  max-width: 1200px;
+  margin: 10px auto;
+  background: transparent;
+  border-radius: 24px;
+  padding: 32px 20px 32px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.dashboard-header {
+  text-align: center;
+  /* margin-bottom: 12px; */
+}
+.dashboard-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #23232a;
+  letter-spacing: 1px;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.dashboard-stats {
+  display: flex;
+  gap: 32px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  background: #f9f5f1;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(60,60,60,0.10);
+  border: 1.5px solid #e0e0e0;
+  padding: 32px 40px;
+  min-width: 320px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+.stat-card:hover {
+  box-shadow: 0 8px 32px rgba(60,60,60,0.16);
+  border: 1.5px solid #bdbdbd;
+}
+
+.stat-number {
+  font-size: 4.5rem;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  color: #2d3a3a;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 1.2rem;
+  color: #5c5c5c;
+  opacity: 0.95;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-weight: 500;
+}
+
+.thali-intents {
+  flex: 2;
+  align-items: flex-start;
+  min-width: 400px;
+}
+.thali-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2d3a3a;
+  margin-bottom: 12px;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+.thali-table {
+  width: 100%;
+  margin-top: 8px;
+}
+.thali-table-header, .thali-table-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+.thali-table-header {
+  font-weight: 700;
+  color: #23232a;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #bdbdbd;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+.thali-table-row {
+  font-size: 1.05rem;
+  color: #23232a;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+.dashboard-analytics {
+  margin-top: 32px;
+  background: #f9f5f1;
+  border-radius: 18px;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(60,60,60,0.10);
+  border: 1.5px solid #e0e0e0;
+}
+.analytics-placeholder {
+  color: #8d8d8d;
+  font-size: 1.2rem;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  text-align: center;
+  font-style: italic;
+}
+
+@media (max-width: 900px) {
+  .dashboard-root {
+    padding: 16px 4px;
+  }
+  .dashboard-stats {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .stat-card, .thali-intents {
+    min-width: unset;
+    width: 100%;
+  }
+} 

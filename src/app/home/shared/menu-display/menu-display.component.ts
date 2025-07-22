@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { OrderData, OrderResponse, OrderService } from '../../../services/order.service';
+// import { OrderData, OrderResponse, OrderService } from '../../../services/order.service';
 import { SuccessPopupComponent, SuccessPopupData } from '../../../shared/success-popup/success-popup.component';
+import { OrderService } from 'src/app/services/order.service';
+import { OrderData, OrderResponse } from 'src/app/auth/interfaces/user.interface';
 
 interface MenuItem {
   id: number;
@@ -155,12 +157,9 @@ export class MenuDisplayComponent {
       totalAmount: this.getTotalAmount(),
       timestamp: new Date()
     };
-    console.log("before api call");
-    
 
     this.orderService.shareIntent(orderData).subscribe({
       next: (response: OrderResponse) => {
-        console.log('API Response:', response);
         this.isSharingIntent = false;
         
         if (response.success) {

@@ -2,53 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { OrderData, OrderResponse, OrdersResponse } from '../auth/interfaces/user.interface';
 
-export interface OrderData {
-  messId: number;
-  messName: string;
-  selectedItems: Array<{
-    item: {
-      id: number;
-      name: string;
-      description: string;
-      price: number;
-      imageUrl: string;
-      isVegetarian: boolean;
-      spicyLevel: number;
-    };
-    quantity: number;
-  }>;
-  headCount: number;
-  totalAmount: number;
-  timestamp: Date;
-  userid?: string; // Optional user ID from backend
-}
 
-export interface OrderResponse {
-  success: boolean;
-  orderId: string;
-  message?: string;
-}
-
-export interface UserOrder {
-  headCount: number;
-  messId: number;
-  messName: string;
-  selectedItems: Array<{
-    itemName: string;
-    quantity: number;
-    pricePerUnit: string;
-  }>;
-  timestamp: string;
-  totalAmount: string;
-  userId: string;
-}
-
-export interface OrdersResponse {
-  data: UserOrder[];
-  success?: boolean;
-  message?: string;
-}
 
 @Injectable({
   providedIn: 'root'

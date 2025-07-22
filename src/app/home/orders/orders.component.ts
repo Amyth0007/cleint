@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { OrderService, OrdersResponse, UserOrder } from '../../services/order.service';
+import { OrderService } from '../../services/order.service';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
+import { OrdersResponse, UserOrder } from 'src/app/auth/interfaces/user.interface';
 
 @Component({
   selector: 'app-orders',
@@ -68,7 +69,7 @@ export class OrdersComponent implements OnInit {
   }
 
   getTotalItems(order: UserOrder): number {
-    return order.selectedItems.reduce((total, item) => total + item.quantity, 0);
+    return order.selectedItems.reduce((total : any, item: any) => total + item.quantity, 0);
   }
 
   getOrderId(order: UserOrder): string {

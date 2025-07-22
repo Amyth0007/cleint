@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
+import { MessService } from 'src/app/services/mess.service';
 import { AuthService } from '../../services/auth-service/auth.service';
 import { AuthButtonComponent } from '../../shared/auth-button/auth-button.component';
 import { AuthInputComponent } from '../../shared/auth-input/auth-input.component';
@@ -33,7 +34,8 @@ export class MessOwnerLoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private messService: MessService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -63,11 +65,28 @@ export class MessOwnerLoginComponent {
       const { email, password } = this.loginForm.value;
 
       this.authService.loginMessOwner(email, password).subscribe({
-        next: (response) => {
+        next: async (response) => {
           if (response.success) {
             this.showSuccess();
-            setTimeout(() => {
-              this.router.navigate(['/mess-owner/dashboard']);
+            setTimeout(async () => {
+              const currentUser = this.authService.currentUserValue;
+              const userId = currentUser?.id || currentUser?.userId;
+              if (!userId) {
+                this.router.navigate(['/mess-owner/initial-setup']);
+                return;
+              }
+              this.messService.checkMessExists(userId).subscribe({
+                next: (result) => {
+                  if (result?.exists) {
+                    this.router.navigate(['/mess-owner/setup/dash']);
+                  } else {
+                    this.router.navigate(['/mess-owner/initial-setup']);
+                  }
+                },
+                error: () => {
+                  this.router.navigate(['/mess-owner/initial-setup']);
+                }
+              });
             }, 500);
           }
         },
@@ -90,4 +109,6 @@ export class MessOwnerLoginComponent {
   logInWithFacebook = () => {
     console.log('Facebook login');
   };
+
+  
 } 

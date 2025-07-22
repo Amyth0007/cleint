@@ -31,10 +31,11 @@ export class AuthService {
       .pipe(
         map(response => {
           if (response.success && response.data.token) {
-            // store user details and jwt token in local storage
             const user = {
               ...response.data.user,
-              token: response.data.token
+              token: response.data.token,
+              roles:  'user',
+              activeRole: null // will be set after role selection
             };
             localStorage.setItem('currentUser', JSON.stringify(user));
             this.currentUserSubject.next(user);
@@ -49,10 +50,11 @@ export class AuthService {
       .pipe(
         map(response => {
           if (response.success && response.data.token) {
-            // store user details and jwt token in local storage
             const user = {
               ...response.data.user,
-              token: response.data.token
+              token: response.data.token,
+              roles: response.data.user.roles || [response.data.user.role || 'mess_owner'],
+              activeRole: null // will be set after role selection
             };
             localStorage.setItem('currentUser', JSON.stringify(user));
             this.currentUserSubject.next(user);
@@ -60,6 +62,21 @@ export class AuthService {
           return response;
         })
       );
+  }
+
+  setActiveRole(role: string) {
+    const user = this.currentUserValue;
+    user.activeRole = role;
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    this.currentUserSubject.next(user);
+  }
+
+  getActiveRole(): string | null {
+    return this.currentUserValue?.activeRole || null;
+  }
+
+  hasRole(role: string): boolean {
+    return this.currentUserValue?.roles?.includes(role);
   }
 
   signup(userData: { username: string; email: string; password: string }) {
@@ -120,7 +137,7 @@ export class AuthService {
 
   isMessOwner(): boolean {
     // return true;
-    console.log("current user value",this.currentUserValue);
+    // console.log("current user value",this.currentUserValue);
     
     return this.currentUserValue?.role === 'mess_owner';
   }

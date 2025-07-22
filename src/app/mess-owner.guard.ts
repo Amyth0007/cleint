@@ -6,13 +6,23 @@ import { AuthService } from './auth/services/auth-service/auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class messOwnerGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
     if (this.authService.isLoggedIn()) {
+      if (this.authService.isMessOwner()) {
+        // If mess owner tries to access root, redirect to their dashboard
+        if (state.url === '/' || state.url === '') {
+          this.router.navigate(['/mess-owner/setup/dash']);
+        } else {
+          // Block mess owner from accessing user routes
+          this.router.navigate(['/mess-owner/setup/dash']);
+        }
+        return false;
+      }
       return true;
     }
 

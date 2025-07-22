@@ -1,18 +1,21 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { UserData } from '../../../auth/interfaces/user.interface';
-import { UserService } from '../../../services/user.service';
-
+import { UserData } from 'src/app/auth/interfaces/user.interface';
+import { UserService } from 'src/app/services/user.service';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-mess-owner-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  standalone: true,
-  imports: [CommonModule, RouterLink]
+  imports: [CommonModule]
 })
 export class MessOwnerDashboardComponent implements OnInit {
   userData: UserData | null = null;
+  totalIntentsToday = 7;
+  intentsByThali = [
+    { name: 'Classic Veg Thali', total: 12 },
+    { name: 'Deluxe Non-Veg Thali', total: 8 },
+    { name: 'Family Combo', total: 5 }
+  ];
 
   constructor(private userService: UserService) {}
 
