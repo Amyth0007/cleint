@@ -10,6 +10,7 @@ import { AuthSeparatorComponent } from "../shared/auth-separator/auth-separator.
 import { AuthSocialButtonComponent } from "../shared/auth-social-button/auth-social-button.component";
 import { passwordMatchValidator } from '../shared/validators/password-match.validator';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { userRole } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-signup',
@@ -62,7 +63,7 @@ export class SignupComponent {
 
       const { username, email, password } = this.signupForm.value;
 
-      this.authService.signup({ username, email, password }).subscribe({
+      this.authService.signup({ username, email, password, role:userRole.customer }).subscribe({
         next: (response) => {
           if (response.success) {
             // this.toastr.success(response.message, 'Success');

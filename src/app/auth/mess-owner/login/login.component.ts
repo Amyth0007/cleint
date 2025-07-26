@@ -10,6 +10,8 @@ import { AuthInputComponent } from '../../shared/auth-input/auth-input.component
 import { AuthLayoutComponent } from '../../shared/auth-layout/auth-layout.component';
 import { AuthSeparatorComponent } from "../../shared/auth-separator/auth-separator.component";
 import { AuthSocialButtonComponent } from "../../shared/auth-social-button/auth-social-button.component";
+import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { userRole } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-mess-owner-login',
@@ -35,7 +37,8 @@ export class MessOwnerLoginComponent {
     private authService: AuthService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private messService: MessService
+    private messService: MessService,
+    private snackBarService: SnackBarService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -67,10 +70,14 @@ export class MessOwnerLoginComponent {
       this.authService.loginMessOwner(email, password).subscribe({
         next: async (response) => {
           if (response.success) {
-            this.showSuccess();
             setTimeout(async () => {
               const currentUser = this.authService.currentUserValue;
               const userId = currentUser?.id || currentUser?.userId;
+              if (currentUser?.role !== userRole.mess_owner) {
+                this.snackBarService.showError('⚠️ You are not authorized to access this page.');
+                return;
+              }
+              this.showSuccess();
               if (!userId) {
                 this.router.navigate(['/mess-owner/initial-setup']);
                 return;
@@ -110,5 +117,5 @@ export class MessOwnerLoginComponent {
     console.log('Facebook login');
   };
 
-  
-} 
+
+}

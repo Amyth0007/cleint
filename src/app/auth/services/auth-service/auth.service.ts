@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthResponse } from '../../interfaces/auth.interface';
 import { MessOwner } from '../../interfaces/mess-owner.interface';
+import { userRole } from '../../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class AuthService {
             const user = {
               ...response.data.user,
               token: response.data.token,
-              roles:  'user',
+              roles: 'user',
               activeRole: null // will be set after role selection
             };
             localStorage.setItem('currentUser', JSON.stringify(user));
@@ -53,7 +54,7 @@ export class AuthService {
             const user = {
               ...response.data.user,
               token: response.data.token,
-              roles: response.data.user.roles || [response.data.user.role || 'mess_owner'],
+              roles: response.data.user.roles || [response.data.user.role || userRole.mess_owner],
               activeRole: null // will be set after role selection
             };
             localStorage.setItem('currentUser', JSON.stringify(user));
@@ -79,7 +80,7 @@ export class AuthService {
     return this.currentUserValue?.roles?.includes(role);
   }
 
-  signup(userData: { username: string; email: string; password: string }) {
+  signup(userData: { username: string; email: string; password: string; role: userRole }) {
     return this.http.post<AuthResponse>(`${this.API_URL}/signup`, userData)
       .pipe(
         map(response => {
@@ -138,8 +139,8 @@ export class AuthService {
   isMessOwner(): boolean {
     // return true;
     // console.log("current user value",this.currentUserValue);
-    
-    return this.currentUserValue?.role === 'mess_owner';
+
+    return this.currentUserValue?.role === userRole.mess_owner;
   }
 
   getToken(): string | null {

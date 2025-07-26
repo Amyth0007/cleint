@@ -6,13 +6,13 @@ import { AuthService } from 'src/app/auth/services/auth-service/auth.service';
 import { MessService } from 'src/app/services/mess.service';
 
 @Component({
-  selector: 'app-mess-onwner-initial',
-  templateUrl: './mess-onwner-initial.component.html',
-  styleUrl: './mess-onwner-initial.component.css',
+  selector: 'app-mess-registration',
+  templateUrl: './mess-registration.component.html',
+  styleUrl: './mess-registration.component.css',
   imports: [ReactiveFormsModule, CommonModule ]
 })
-export class MessOnwnerInitialComponent {
-    messForm: FormGroup;
+export class MessRegistrationComponent {
+  messForm: FormGroup;
     submitted = false;
     registering = false;
     lat: number | null = null;

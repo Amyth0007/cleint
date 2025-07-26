@@ -59,7 +59,8 @@ export const routes: Routes = [
         {
           path: 'initial-setup',
           loadComponent: () =>
-            import('./home/mess-owner-setup/components/mess-onwner-initial/mess-onwner-initial.component').then((m) => m.MessOnwnerInitialComponent),
+            import('./home/mess-owner-setup/components/mess-registration/mess-registration.component').then((m) => 
+              m.MessRegistrationComponent),
         },
         {
           path: 'setup',
