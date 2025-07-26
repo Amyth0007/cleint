@@ -4,6 +4,11 @@ export interface UserData {
   // add other user properties as needed
 }
 
+export enum userRole {
+  customer = 'customer',
+  mess_owner = 'mess_owner'
+}
+
 export interface OrderData {
   messId: number;
   messName: string;

@@ -10,6 +10,7 @@ import { AuthInputComponent } from '../../shared/auth-input/auth-input.component
 import { AuthLayoutComponent } from '../../shared/auth-layout/auth-layout.component';
 import { AuthSeparatorComponent } from "../../shared/auth-separator/auth-separator.component";
 import { AuthSocialButtonComponent } from "../../shared/auth-social-button/auth-social-button.component";
+import { userRole } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-messsownersignup',
@@ -66,7 +67,7 @@ export class MesssownersignupComponent {
 
       const formData = {
         ...this.signupForm.value,
-        role: 'mess_owner'
+        role: userRole.mess_owner
       };
 
       this.authService.signupMessOwner(formData).subscribe({
