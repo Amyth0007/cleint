@@ -139,8 +139,8 @@ export class AuthService {
   isMessOwner(): boolean {
     // return true;
     // console.log("current user value",this.currentUserValue);
-
     return this.currentUserValue?.role === userRole.mess_owner;
+
   }
 
   getToken(): string | null {

@@ -79,6 +79,12 @@
                 (click)="updateItemQuantity(item.id, getItemQuantity(item.id) + 1)">
                 +
               </button>
+              <button 
+                type="button" 
+                class="quantity-btn reset-btn"
+                (click)="updateItemQuantity(item.id, 0)">
+                ⟳
+              </button>
             </div>
             <div class="item-total" *ngIf="getItemQuantity(item.id) > 0">
               Total: ₹{{item.price * getItemQuantity(item.id)}}

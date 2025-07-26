@@ -196,6 +196,22 @@
   transition: all 0.2s ease;
 }
 
+.reset-btn {
+  border-color: #ef4444; /* light red border */
+  color: #ef4444;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+/* Hover effect for Reset button */
+.reset-btn:hover {
+  background-color: #fca5a5; /* light red background */
+  color: white;
+  border-color: #f87171;
+}
+
 .quantity-btn:hover:not(:disabled) {
   background: #10b981;
   color: white;
@@ -396,3 +412,17 @@
     min-width: auto;
   }
 } 
+
+/* Reset-specific styles */
+.reset-btn {
+  border-color: #ef4444; /* light red border */
+  color: #ef4444;
+  font-size: 30px; /* make icon/text bigger */
+}
+
+/* Hover effect for Reset button */
+.reset-btn:hover {
+  background-color: #fca5a5; /* light red background */
+  color: white;
+  border-color: #f87171;
+}
