@@ -76,12 +76,16 @@ export class MesssownersignupComponent {
             setTimeout(async () => {
               const currentUser = this.authService.currentUserValue;
               const userId = currentUser?.id || currentUser?.userId;
+              console.log(userId);
+              
               if (!userId) {
                 this.router.navigate(['/mess-owner/initial-setup']);
                 return;
               }
               this.messService.checkMessExists(userId).subscribe({
                 next: (result) => {
+                  console.log(result);
+                  
                   if (result?.exists) {
                     this.router.navigate(['/mess-owner/setup/dash']);
                   } else {

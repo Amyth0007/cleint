@@ -17,7 +17,7 @@ export class LocationService {
     const currentUser : any = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${currentUser["token"]}`);
     
-    return this.http.get(`${this.apiUrl}/history/messlocation`, { headers });
+    return this.http.get(`${this.apiUrl}/messlocation`, { headers });
   }
 
   getCityFromCoordinates(lat: number, lng: number): Promise<string> {

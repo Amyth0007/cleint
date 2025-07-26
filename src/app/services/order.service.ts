@@ -10,7 +10,7 @@ import { OrderData, OrderResponse, OrdersResponse } from '../auth/interfaces/use
   providedIn: 'root'
 })
 export class OrderService {
-  private apiUrl = `${environment.apiUrl}/history/save-intent`;
+  private apiUrl = `${environment.apiUrl}/save-intent`;
 
   constructor(private http: HttpClient) { }
 
@@ -43,7 +43,7 @@ export class OrderService {
     const currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${currentUser.token}`);
     
-    const url = `${environment.apiUrl}/history/get-intent?userid=${currentUser.id || currentUser.userId}`;
+    const url = `${environment.apiUrl}/get-intent?userid=${currentUser.id || currentUser.userId}`;
     
     return this.http.get<OrdersResponse>(url, { headers }).pipe(
       tap((response) => console.log('Fetched user intents:', response)),
