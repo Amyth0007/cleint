@@ -4,7 +4,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth-service/auth.service';
 import { MessService } from 'src/app/services/mess.service';
-
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-mess-registration',
   templateUrl: './mess-registration.component.html',
@@ -20,8 +22,10 @@ export class MessRegistrationComponent {
     selectedImageName: string | null = null;
     address: string | null = null;
     addressLoading: boolean = false;
+    imageUploading: boolean = false;
+    imageUrl: any = null;
   
-    constructor(private fb: FormBuilder, private router: Router, private messService: MessService, private authService: AuthService) {
+    constructor(private fb: FormBuilder, private router: Router, private messService: MessService, private authService: AuthService, private http: HttpClient) {
       this.messForm = this.fb.group({
         name: ['', Validators.required],
         description: ['', Validators.required],
@@ -88,14 +92,35 @@ export class MessRegistrationComponent {
       }
     }
     
-  
+    uploadImageToCloudinary(file: File): Observable<string> {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'mess_owner'); 
+      return this.http.post<any>('https://api.cloudinary.com/v1_1/dd8oitnyu/image/upload', formData)
+      .pipe(
+        map((response: any) => response.url)
+      );
+    }
+    
     onUploadImage(event: any) {
       const file = event.target.files[0];
       if (file) {
-        this.messForm.patchValue({ image: file });
         this.selectedImageName = file.name;
+        this.imageUploading = true;
+    
+        this.uploadImageToCloudinary(file).subscribe({
+          next: (url: any) => {
+            this.imageUrl = url;
+            this.imageUploading = false;
+          },
+          error: () => {
+            alert('Image upload failed.');
+            this.imageUploading = false;
+          }
+        });
       }
     }
+    
   
     onSubmit() {
       this.submitted = true;
@@ -112,6 +137,8 @@ export class MessRegistrationComponent {
         this.registering = false;
         return;
       }
+      console.log(this.imageUrl);
+      
       const messData = {
         name,
         description,
@@ -121,6 +148,7 @@ export class MessRegistrationComponent {
         latitude: this.lat,
         longitude: this.lng,
         ownerId,
+        image: this.imageUrl
       };
       this.messService.createMess(messData).subscribe({
         next: (createdMess) => {
