@@ -128,6 +128,8 @@ export class DashboardComponent implements OnInit {
         this.userData = data;
       },
       error: (error) => {
+        if(error)
+        this.logout()
         console.error('Error fetching user data:', error);
       }
     });
@@ -242,6 +244,7 @@ export class DashboardComponent implements OnInit {
         this.messLocations = data.data
       },
       error: (error) => {
+        this.logout()
         console.error('Error fetching user data:', error);
       }
     });
@@ -361,5 +364,9 @@ export class DashboardComponent implements OnInit {
   private updateFilteredLocations() {
     // This will trigger the getter to update the filtered locations
     this.messLocations = [...this.messLocations];
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }
