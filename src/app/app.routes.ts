@@ -94,11 +94,11 @@ export const routes: Routes = [
               loadComponent: () =>
                 import('./home/mess-owner-setup/components/my-thalis/my-thalis.component').then((m) => m.MyThalisComponent),
             },
-            // {
-            //   path: 'profile',
-            //   loadComponent: () =>
-            //     import('./home/mess-owner/components/mess-owner-profile/mess-owner-profile.component').then((m) => m.MessOwnerProfileComponent),
-            // }
+            {
+              path: 'profile',
+              loadComponent: () =>
+                import('./home/mess-owner-setup/components/mess-onwer-user-profile/mess-onwer-user-profile.component').then((m) => m.MessOnwerUserProfileComponent),
+            }
           ]
         }
       ]

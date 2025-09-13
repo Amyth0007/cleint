@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="setup-footer">
-        <button class="setup-btn register" [disabled]="registering" type="submit">
+        <button class="setup-btn register" [disabled]="registering && !imageUploading" type="submit">
           Register Mess (CTA)
         </button>
       </div>

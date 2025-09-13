@@ -7,7 +7,6 @@
     <a routerLink="/mess-owner/setup/add-thali" routerLinkActive="active">Add Thali</a>
     <a routerLink="/mess-owner/setup/view-intents" routerLinkActive="active">View Intents</a>
     <a routerLink="/mess-owner/setup/my-thalis" routerLinkActive="active">My Thalis</a>
-    <a routerLink="/mess-owner/setup/profile" routerLinkActive="active">My Profile</a>
   </div>
   <div class="navbar-right">
     <div class="profile" (click)="toggleDropdown()">
@@ -15,7 +14,7 @@
       <span class="profile-name">Owner</span>
       <span class="dropdown-arrow">▼</span>
       <div class="dropdown" *ngIf="showDropdown">
-        <a routerLink="/mess-owner/profile">Profile</a>
+        <a routerLink="/mess-owner/setup/profile" routerLinkActive="active">Profile</a>
         <a (click)="logout()">Logout</a>
       </div>
     </div>
