@@ -28,6 +28,8 @@ export class ProfileComponent implements OnInit {
   constructor(private authService: AuthService, private fb: FormBuilder, private snackBarService: SnackBarService, private router: Router, private userService: UserService,
   ) { }
 
+  
+
   ngOnInit() {
     this.userService.getUserData().subscribe({
       next: (data) => {

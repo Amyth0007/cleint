@@ -1,0 +1,184 @@
+<div class="dashboard-content">
+
+    <div class="profile-container">
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button 
+          class="tab-button" 
+          [class.active]="activeTab === 'user'"
+          (click)="activeTab = 'user'">
+          <span class="material-icons tab-icon">person</span>
+          <span class="tab-text">User Profile</span>
+        </button>
+        <button 
+          class="tab-button" 
+          [class.active]="activeTab === 'mess'"
+          (click)="activeTab = 'mess'">
+          <span class="material-icons tab-icon">restaurant</span>
+          <span class="tab-text">Mess Profile</span>
+        </button>
+      </div>
+  
+      <!-- User Profile Section -->
+      <div class="profile-section" *ngIf="activeTab === 'user'">
+        <div class="profile-header">
+          <div class="initials-circle">
+            <span class="initials-text">{{ getInitials() }}</span>
+          </div>
+          <div class="profile-info">
+            <h2 class="user-name">{{ currentUser?.name || 'User' }}</h2>
+            <p class="user-email">{{ currentUser?.email }}</p>
+          </div>
+        </div>
+        
+        <form [formGroup]="profileForm" class="profile-form">
+          <div class="form-group">
+            <app-auth-input label="Username" placeholder="Enter your name" 
+              [control]="profileForm.get('name')!"></app-auth-input>
+          </div>
+          
+          <div class="form-group">
+            <app-auth-input label="Email" placeholder="Enter your email" type="email" 
+              [control]="profileForm.get('email')!"></app-auth-input>
+          </div>
+          
+          <div class="form-group">
+            <div class="toggle-container">
+              <label class="toggle-switch">
+                <input type="checkbox" (change)="togglePasswordSection()" [checked]="showPasswordSection" />
+                <span class="slider round"></span>
+              </label>
+              <span class="toggle-label">
+                {{ showPasswordSection ? 'Cancel Password Change' : 'Change Password' }}
+              </span>
+            </div>
+          </div>
+  
+          <div *ngIf="showPasswordSection" [formGroup]="passwordForm" class="password-form">
+            <div class="form-group">
+              <app-auth-input label="Old Password" placeholder="Enter current password" type="password"
+                [control]="passwordForm.get('oldPassword')!"></app-auth-input>
+            </div>
+            
+            <div class="form-group">
+              <app-auth-input label="New Password" placeholder="Enter new password" type="password"
+                [control]="passwordForm.get('password')!"></app-auth-input>
+            </div>
+            
+            <div class="form-group">
+              <app-auth-input label="Confirm Password" placeholder="Confirm new password" type="password"
+                [control]="passwordForm.get('confirmPassword')!"></app-auth-input>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <app-auth-input label="Age" placeholder="Enter your age" type="number"
+              [control]="profileForm.get('age')!"></app-auth-input>
+          </div>
+          
+          <div class="form-group">
+            <label class="input-label">Gender</label>
+            <select class="custom-select" [formControl]="genderControl">
+              <option *ngFor="let gender of genderOptions" [value]="gender">{{ gender }}</option>
+            </select>
+          </div>
+          
+          <div class="form-actions">
+            <app-auth-button [text]="'Update Profile'" (click)="onUpdateProfile()"
+              [disabled]="profileForm.invalid"></app-auth-button>
+          </div>
+        </form>
+      </div>
+  
+      <!-- Mess Profile Section -->
+      <div class="mess-section" *ngIf="activeTab === 'mess'">
+        <h2 class="section-title">Mess Information</h2>
+        
+        <form [formGroup]="messForm" class="mess-form">
+          <div class="form-group">
+            <app-auth-input label="Mess Name" placeholder="Enter mess name"
+              [control]="messForm.get('name')!"></app-auth-input>
+          </div>
+          
+          <div class="form-group">
+            <label class="input-label">Description</label>
+            <textarea class="custom-textarea" formControlName="description" 
+              placeholder="Tell customers about your mess..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label class="input-label">Mess Type</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="type" value="veg" />
+                <span class="radio-checkmark"></span>
+                <span class="radio-label">Veg</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="type" value="non-veg" />
+                <span class="radio-checkmark"></span>
+                <span class="radio-label">Non-Veg</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="type" value="both" />
+                <span class="radio-checkmark"></span>
+                <span class="radio-label">Both</span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <app-auth-input label="City" placeholder="Enter city"
+              [control]="messForm.get('city')!"></app-auth-input>
+          </div>
+          
+          <div class="form-group">
+            <label class="input-label">Location</label>
+            <button type="button" class="location-button" (click)="onDetectLocation()">
+              <span class="material-icons">my_location</span>
+              <span>Detect Location</span>
+            </button>
+            <div class="location-info" *ngIf="address">
+              <span class="material-icons">location_on</span>
+              <span>{{ address }}</span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="input-label">Mess Image</label>
+            <div class="upload-container" 
+                 (drop)="onDrop($event)"
+                 (dragover)="onDragOver($event)"
+                 (dragleave)="onDragLeave($event)"
+                 [class.drag-active]="isDragOver">
+              <input type="file" (change)="onUploadImage($event)" hidden accept="image/*" id="messImageUpload" />
+              <div class="upload-content">
+                <span class="material-icons upload-icon">cloud_upload</span>
+                <p class="upload-text">
+                  <span class="highlight">Click to upload</span> or drag and drop
+                </p>
+                <p class="upload-subtext">PNG, JPG (Max. 2MB)</p>
+                <button type="button" class="browse-button" (click)="triggerFileInput()">Browse Files</button>
+              </div>
+            </div>
+            <div class="file-preview" *ngIf="selectedImage || currentMess?.image">
+              <div class="preview-container">
+                <img [src]="selectedImage ? selectedImagePreview : currentMess?.image" 
+                     alt="Mess Preview" 
+                     class="image-preview">
+                <button type="button" class="remove-button" (click)="removeImage()">
+                  <span class="material-icons">close</span>
+                </button>
+              </div>
+              <div class="file-name">{{ selectedImageName || 'Current Image' }}</div>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <app-auth-button [text]="'Save Mess Profile'" (click)="onUpdateMess()"
+              [disabled]="messForm.invalid && imageUploading"></app-auth-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

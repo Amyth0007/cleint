@@ -137,8 +137,7 @@ export class MessRegistrationComponent {
         this.registering = false;
         return;
       }
-      console.log(this.imageUrl);
-      
+
       const messData = {
         name,
         description,
