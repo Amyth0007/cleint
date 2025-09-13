@@ -13,6 +13,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "sourceMap": true,
+            "preserveSymlinks": true,
+            "optimization": false,
             "outputPath": "dist/cleint",
             "index": "src/index.html",
             "browser": "src/main.ts",

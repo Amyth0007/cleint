@@ -10,12 +10,20 @@ import { AuthService } from 'src/app/auth/services/auth-service/auth.service';
   imports: [CommonModule, RouterLink]
 })
 export class MessOwnerNavComponent {
-   showDropdown = false;
-
-  constructor(private authService: AuthService) {}
+  showDropdown = false;
+  showMenu = false;
+  constructor(private authService: AuthService) { }
 
   toggleDropdown() {
     this.showDropdown = !this.showDropdown;
+  }
+
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
+  }
+
+  closeMenu(){
+    this.showMenu = false;
   }
 
   logout() {

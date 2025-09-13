@@ -2,14 +2,19 @@
   <div class="navbar-left">
     <span class="app-name">MessMate</span>
   </div>
-  <div class="navbar-center">
-    <a routerLink="/mess-owner/setup/dash" routerLinkActive="active">Dashboard</a>
-    <a routerLink="/mess-owner/setup/add-thali" routerLinkActive="active">Add Thali</a>
-    <a routerLink="/mess-owner/setup/view-intents" routerLinkActive="active">View Intents</a>
-    <a routerLink="/mess-owner/setup/my-thalis" routerLinkActive="active">My Thalis</a>
-    <a routerLink="/mess-owner/setup/profile" routerLinkActive="active">My Profile</a>
+
+  <div class="navbar-center" [class.active]="showMenu">
+    <a routerLink="/mess-owner/setup/dash" routerLinkActive="active" (click)="closeMenu()">Dashboard</a>
+    <a routerLink="/mess-owner/setup/add-thali" routerLinkActive="active" (click)="closeMenu()">Add Thali</a>
+    <a routerLink="/mess-owner/setup/view-intents" routerLinkActive="active" (click)="closeMenu()">View Intents</a>
+    <a routerLink="/mess-owner/setup/my-thalis" routerLinkActive="active" (click)="closeMenu()">My Thalis</a>
+    <a routerLink="/mess-owner/setup/profile" routerLinkActive="active" (click)="closeMenu()">My Profile</a>
   </div>
+
   <div class="navbar-right">
+    <!-- 🍔 Menu Button -->
+    <button class="menu-button" (click)="toggleMenu()">☰</button>
+
     <div class="profile" (click)="toggleDropdown()">
       <span class="profile-icon">👤</span>
       <span class="profile-name">Owner</span>
@@ -20,4 +25,4 @@
       </div>
     </div>
   </div>
-</nav> 
+</nav>

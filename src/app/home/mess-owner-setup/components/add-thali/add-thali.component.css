@@ -1,4 +1,338 @@
-div {
-  color: #ea580c;
-  font-size: 1.2rem;
-} 
+/* Form Container */
+.add-thali-form {
+  background: #f9f5f1;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(60, 60, 60, 0.10);
+  border: 1.5px solid #e0e0e0;
+  padding: 32px 40px;
+  max-width: 680px;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.add-thali-form:hover {
+  box-shadow: 0 8px 32px rgba(60, 60, 60, 0.16);
+  border-color: #bdbdbd;
+}
+
+/* Form Heading */
+.thali-form-heading {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #23232a;
+  text-align: center;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-bottom: 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+.thali-form-heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  border-radius: 2px;
+}
+
+/* Form Controls */
+.form-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .input-row {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.input-row label {
+  min-width: 140px;
+  font-weight: 500;
+  color: #2d3a3a;
+  font-size: 0.95rem;
+}
+
+.input-row input,
+.input-row select,
+.input-row textarea {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.input-row input:focus,
+.input-row select:focus,
+.input-row textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.input-row input[type="number"] {
+  max-width: 100px;
+}
+
+.input-row input[type="time"] {
+  max-width: 150px;
+}
+
+/* Radio/Checkbox Group */
+.checkbox-group {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  color: #2d3a3a;
+  transition: color 0.2s;
+}
+
+.checkbox-group input[type="radio"],
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #3b82f6;
+  cursor: pointer;
+}
+
+/* Upload Container */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.5rem;
+}
+
+.upload-prompt {
+  border: 2px dashed #bdbdbd;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  max-width: 280px;
+  transition: all 0.2s ease;
+}
+
+.upload-prompt:hover {
+  border-color: #3b82f6;
+  background: #f8fafc;
+}
+
+.upload-icon {
+  margin-bottom: 0.75rem;
+  color: #3b82f6;
+}
+
+.highlight {
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+.image-preview {
+  position: relative;
+  display: inline-block;
+  max-width: 280px;
+  margin-top: 1rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e0e0e0;
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(239, 68, 68, 0.9);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.remove-btn:hover {
+  background: rgba(220, 38, 38, 1);
+  transform: scale(1.05);
+}
+
+/* Validation Styles */
+.required {
+  color: #ef4444;
+  margin-left: 4px;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  margin-left: 0;
+}
+
+@media (min-width: 640px) {
+  .error {
+    margin-left: 140px;
+  }
+}
+
+.has-error .upload-prompt {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+/* Button Styles */
+.form-row.center {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.save-btn,.cancel-btn {
+  background-color: #23232a;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.save-btn:hover,.cancel-btn:hover {
+  background-color: #f59e0b;
+  color: #23232a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.save-btn:active,.cancel-btn:active {
+  transform: translateY(0);
+}
+
+.delete-btn {
+  background-color: #ef4444;
+}
+
+.delete-btn:hover {
+  background-color: #dc2626;
+}
+
+/* Loading State */
+.save-btn.loading,.cancel-btn.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.save-btn.loading::after,.cancel-btn.loading::after {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  .add-thali-form {
+    padding: 1.5rem;
+    margin: 1rem;
+    border-radius: 12px;
+  }
+
+  .thali-form-heading {
+    font-size: 1.75rem;
+  }
+
+  .form-row.center {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .save-btn,.cancel-btn {
+    width: 100%;
+  }
+}
+
+/* Enhanced Focus States */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Disabled State */
+input:disabled,
+select:disabled,
+textarea:disabled,
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f3f4f6;
+}
+
+.form-row.center {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}

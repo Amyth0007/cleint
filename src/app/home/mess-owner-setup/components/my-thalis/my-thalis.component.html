@@ -1,1 +1,99 @@
-<div>My Thalis works!</div> 
+<!-- my-thalis.component.html -->
+<div class="container">
+  <h1 class="my-thalis-heading">My Thalis</h1>
+
+  <!-- Edit Form (shown when editing) -->
+  <div *ngIf="editingState.isEditing$ | async" class="edit-form-container">
+    <app-add-thali [thaliData]="selectedThali" (thaliCreated)="onThaliCreated($event)" (thaliUpdated)="onThaliUpdated()"
+      (cancelEdit)="onCancelEdit()">
+    </app-add-thali>
+  </div>
+
+  <div *ngIf="!(editingState.isEditing$ | async)" class="content-wrapper">
+    <div class="filters-container">
+      <div class="filter-group">
+        <label for="nameFilter">Search by Name:</label>
+        <input id="nameFilter" type="text" [(ngModel)]="filterName" placeholder="Enter thali name..."
+          (input)="onNameFilterInput($event)" />
+      </div>
+
+      <div class="filter-group">
+        <label for="statusFilter">Status:</label>
+        <select id="statusFilter" [(ngModel)]="filterStatus" (change)="onStatusFilterChange($event)">
+          <option value="all">All</option>
+          <option value="published">Published</option>
+          <option value="unpublished">Unpublished</option>
+        </select>
+      </div>
+
+      <!-- Custom Date Filter Only -->
+      <div class="filter-group">
+        <label for="dateFilter">Filter by Date:</label>
+        <input id="dateFilter" type="date" [(ngModel)]="selectedDate" (change)="applyDateFilter()" />
+      </div>
+    </div>
+
+    <!-- Thali List (shown when not editing) -->
+    <div class="thali-list-container">
+      <!-- Display current filter info -->
+      <div class="filter-info" *ngIf="selectedDate">
+        <span class="filter-badge">
+          Showing thalis for: {{selectedDate | date:'mediumDate'}}
+          <button class="clear-filter" (click)="clearDateFilter()">×</button>
+        </span>
+      </div>
+
+      <div class="thali-list">
+        <div class="thali-card" *ngFor="let thali of filteredThalis">
+          <!-- Your existing thali card content -->
+          <div class="thali-image">
+            <img [src]="thali.image" alt="{{ thali.thaliName }}">
+          </div>
+          <div class="thali-details">
+            <h3>{{ thali.thaliName }}</h3>
+            <div class="thali-meta">
+              <span class="thali-type">{{ thali.type | titlecase }}</span>
+              <span class="thali-price">₹{{ thali.price }}</span>
+              <span class="thali-date" *ngIf="thali.available_date">
+                {{ thali.available_date | date:'mediumDate' }}
+              </span>
+            </div>
+            <div class="thali-time">
+              {{ thali.timeFrom }} - {{ thali.timeTo }}
+            </div>
+            <div class="thali-items">
+              <p><strong>Sabzi:</strong> {{ thali.sabzi }}</p>
+              <p><strong>Daal:</strong> {{ thali.daal }}</p>
+              <p *ngIf="thali.sweet"><strong>Sweet:</strong> {{ thali.sweetInfo }}</p>
+            </div>
+          </div>
+          <div class="thali-actions">
+            <button class="publish-btn" [class.unpublish]="thali.published" (click)="togglePublish(thali)">
+              {{ thali.published ? 'Unpublish' : 'Publish' }}
+            </button>
+            <button class="edit-btn" (click)="editThali(thali)">Edit</button>
+            <button class="delete-btn" (click)="deleteThali(thali)">Delete</button>
+          </div>
+        </div>
+
+        <!-- No results message -->
+        <div class="no-results" *ngIf="filteredThalis.length === 0">
+          <p>No thalis found matching your filters.</p>
+          <button class="clear-all-filters" (click)="clearAllFilters()">
+            Clear all filters
+          </button>
+        </div>
+      </div>
+
+      <!-- Floating Action Button -->
+      <button class="add-thali-btn" (click)="addNewThali()" aria-label="Add new thali">
+        <span class="plus-icon">+</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Confirm Dialog -->
+  <app-confirm-dialog *ngIf="showDialog" [colorScheme]="dialogColor" [title]="dialogTitle" [message]="dialogMessage"
+    [confirmText]="dialogConfirmText" [cancelText]="dialogCancelText" (confirm)="confirmDialog()"
+    (cancel)="cancelDialog()"></app-confirm-dialog>
+</div>

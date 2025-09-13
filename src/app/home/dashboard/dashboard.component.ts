@@ -117,7 +117,7 @@ export class DashboardComponent implements OnInit {
     private userService: UserService,
     private locationService: LocationService
   ) {
-    this.directionsService = new google.maps.DirectionsService();
+    // this.directionsService = new google.maps.DirectionsService();
     this.getmessLocations();
   }
 
@@ -128,8 +128,8 @@ export class DashboardComponent implements OnInit {
         this.userData = data;
       },
       error: (error) => {
-        if(error)
-        this.logout()
+        if (error)
+          this.logout()
         console.error('Error fetching user data:', error);
       }
     });
@@ -191,12 +191,12 @@ export class DashboardComponent implements OnInit {
               position.coords.latitude,
               position.coords.longitude
             );
-          
+
             // Check if the found city matches any of our top cities
             const foundCity = this.topCities.find(city =>
               city !== 'All' &&
               (this.userCity?.toLowerCase().includes(city.toLowerCase()) ||
-               city.toLowerCase().includes(this.userCity?.toLowerCase() || ''))
+                city.toLowerCase().includes(this.userCity?.toLowerCase() || ''))
             );
 
             if (foundCity) {
@@ -236,7 +236,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  getmessLocations(){
+  getmessLocations() {
     this.locationService.getLocations().subscribe({
       next: (data: any) => {
         console.log(data.data);
