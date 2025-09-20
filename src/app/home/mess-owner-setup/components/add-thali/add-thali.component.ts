@@ -10,6 +10,7 @@ import { EditingStateService } from 'src/app/services/editing-state.service';
 import { map, Observable, Subject, takeUntil } from 'rxjs';
 import { ThaliService } from 'src/app/services/thalis.service';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-thali',
@@ -60,7 +61,8 @@ export class AddThaliComponent implements OnInit, OnDestroy {
     private snackBar: SnackBarService,
     private editingState: EditingStateService,
     private thaliService: ThaliService,
-    private http: HttpClient
+    private http: HttpClient,
+        private router: Router,
   ) {
     this.thaliForm = this.fb.group({
       thaliName: ['', Validators.required],
@@ -310,6 +312,7 @@ export class AddThaliComponent implements OnInit, OnDestroy {
         this.thaliService.updateThali(this.thaliData.id, thaliData).subscribe({
           next: (response) => {
             this.snackBar.showSuccess('Thali updated successfully!');
+             this.router.navigate(['/mess-owner/setup/my-thalis']);
             this.thaliUpdated.emit(); // Emit update event
           },
           error: (error) => {
@@ -322,6 +325,7 @@ export class AddThaliComponent implements OnInit, OnDestroy {
         this.thaliService.addThali(thaliData).subscribe({
           next: (newThali: Thali) => {
             this.snackBar.showSuccess('Thali created successfully!');
+            this.router.navigate(['/mess-owner/setup/my-thalis']);
             this.thaliCreated.emit(newThali); // Emit create event with data
           },
           error: (error) => {

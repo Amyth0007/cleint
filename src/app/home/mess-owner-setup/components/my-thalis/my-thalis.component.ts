@@ -130,6 +130,8 @@ export class MyThalisComponent implements OnInit {
 
   // Date filter handler
   applyDateFilter(): void {
+    console.log("selected date on selected date filter");
+    
     this.applyFilters();
   }
 
