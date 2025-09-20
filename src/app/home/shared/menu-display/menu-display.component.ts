@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 // import { OrderData, OrderResponse, OrderService } from '../../../services/order.service';
 
@@ -39,7 +39,7 @@ interface UserIntent {
   standalone: true,
   imports: [CommonModule, FormsModule, SuccessPopupComponent]
 })
-export class MenuDisplayComponent implements OnInit{
+export class MenuDisplayComponent implements OnInit, OnChanges{
   @Input() messId: number | null = 0;
   @Input() messName: string = '';
 
@@ -57,9 +57,15 @@ export class MenuDisplayComponent implements OnInit{
     showOrderId: false
   };
 
-  constructor(private orderService: OrderService,  private thaliService: ThaliService,) {}
+  constructor(private orderService: OrderService,  private thaliService: ThaliService,) {
+    console.log(this.messId);
+    
+  }
  
   ngOnInit(): void {
+    this.getThaliData()
+  }
+  ngOnChanges(changes: SimpleChanges): void {
     this.getThaliData()
   }
   // Handle image error
