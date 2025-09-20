@@ -103,19 +103,96 @@
   color: #23232a;
 }
 
+/* Base styles stay the same until media queries */
+
+/* Menu button hidden by default */
+.menu-button {
+  display: none;
+  background: none;
+  border: none;
+  color: #fbbf24;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+/* Breakpoint like Mess User */
+@media (max-width: 1024px) {
+  .navbar {
+    padding: 1rem 1.5rem;
+  }
+}
+
 @media (max-width: 900px) {
   .navbar {
-    flex-direction: column;
+    flex-wrap: wrap; /* allows profile to drop instead of vanish */
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
     height: auto;
-    padding: 12px 8px;
-    gap: 10px;
   }
-  .navbar-center {
-    gap: 12px;
-    flex-wrap: wrap;
-  }
+
   .app-name {
-    margin-right: 0;
-    margin-bottom: 8px;
+    font-size: 1.2rem;
+    margin-right: 16px;
+    flex-shrink: 0; /* prevent it from shrinking too small */
   }
-} 
+
+  .navbar-center {
+    flex: 1;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    min-width: 0; /* allows shrinking without breaking flex */
+  }
+
+  .navbar-center a {
+    font-size: 0.95rem;
+    padding: 8px 12px;
+    white-space: nowrap; /* prevent breaking text */
+  }
+
+  .navbar-right {
+    margin-left: auto;
+    margin-top: 0;
+    flex-shrink: 0; /* ✅ keeps profile visible */
+  }
+}
+
+/* Collapse menu at 768px */
+@media (max-width: 768px) {
+  .menu-button {
+    display: block;
+    margin-left: 0.5rem; /* if you want it near the profile button */
+    order: 2; /* moves it after app-name if using flex */
+  }
+
+  .navbar-center {
+    display: none;
+    position: absolute;
+    top: 100%; /* no gap */
+    left: 0;
+    right: 0;
+    background: #23232a;
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-radius: 0 0 18px 18px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .navbar-center.active {
+    display: flex;
+  }
+
+  .navbar-center a {
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+  }
+
+  .navbar-right {
+    position: relative;
+  }
+}
+

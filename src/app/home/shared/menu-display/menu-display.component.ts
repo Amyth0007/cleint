@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 // import { OrderData, OrderResponse, OrderService } from '../../../services/order.service';
-import { SuccessPopupComponent, SuccessPopupData } from '../../../shared/success-popup/success-popup.component';
+
 import { OrderService } from 'src/app/services/order.service';
 import { OrderData, OrderResponse } from 'src/app/auth/interfaces/user.interface';
+import { SuccessPopupData, SuccessPopupComponent } from '../success-popup/success-popup.component';
 
 interface MenuItem {
   id: number;
@@ -40,12 +41,12 @@ interface UserIntent {
 export class MenuDisplayComponent {
   @Input() messId: number | null = null;
   @Input() messName: string = '';
-  
+
   defaultImage = 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&q=80';
   headCount: number = 1;
   selectedItems: Map<number, number> = new Map(); // itemId -> quantity
   isSharingIntent: boolean = false;
-  
+
   // Success popup properties
   showSuccessPopup: boolean = false;
   successPopupData: SuccessPopupData = {
@@ -131,7 +132,7 @@ export class MenuDisplayComponent {
       details: details,
       showOrderId: true
     };
-    
+
     this.showSuccessPopup = true;
   }
 
@@ -146,9 +147,9 @@ export class MenuDisplayComponent {
   // Share intent with mess owner
   shareIntent() {
     if (this.isSharingIntent) return; // Prevent multiple calls
-    
+
     this.isSharingIntent = true;
-    
+
     const orderData: OrderData = {
       messId: this.messId || 0,
       messName: this.messName,
@@ -161,7 +162,7 @@ export class MenuDisplayComponent {
     this.orderService.shareIntent(orderData).subscribe({
       next: (response: OrderResponse) => {
         this.isSharingIntent = false;
-        
+
         if (response.success) {
           this.showSuccessPopupWithData(response);
         } else {
@@ -175,7 +176,7 @@ export class MenuDisplayComponent {
       }
     });
   }
-  
+
   // Dummy menu data
   menuItems: MenuItem[] = [
     {
@@ -238,4 +239,4 @@ export class MenuDisplayComponent {
   getSpicyIndicators(level: number): number[] {
     return Array(level).fill(0);
   }
-} 
+}

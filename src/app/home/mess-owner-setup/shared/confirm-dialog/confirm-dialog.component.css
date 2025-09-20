@@ -1,0 +1,112 @@
+/* confirm-dialog.component.css */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.dialog-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  width: 320px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.dialog-title {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.dialog-message {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.cancel-btn,
+.confirm-btn {
+  border: none;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.cancel-btn {
+  background: #e0e0e0;
+  color: #333;
+}
+.cancel-btn:hover {
+  background: #d5d5d5;
+}
+
+/* Publish scheme */
+.publish .confirm-btn {
+  background: #43a047;
+  color: white;
+}
+.publish .confirm-btn:hover {
+  background: #388e3c;
+}
+
+/* Unpublish scheme */
+.unpublish .confirm-btn {
+  background: #fb8c00;
+  color: white;
+}
+.unpublish .confirm-btn:hover {
+  background: #ef6c00;
+}
+
+/* Delete scheme */
+.delete .confirm-btn {
+  background: #e53935;
+  color: white;
+}
+.delete .confirm-btn:hover {
+  background: #c62828;
+}
+
+@keyframes fadeIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Save scheme */
+.save .confirm-btn {
+  background: #2e7d32; /* dark green */
+  color: white;
+}
+.save .confirm-btn:hover {
+  background: #1b5e20;
+}
+
+/* Cancel scheme (confirmation cancel, not cancel button) */
+.cancel .confirm-btn {
+  background: #757575; /* gray */
+  color: white;
+}
+.cancel .confirm-btn:hover {
+  background: #616161;
+}

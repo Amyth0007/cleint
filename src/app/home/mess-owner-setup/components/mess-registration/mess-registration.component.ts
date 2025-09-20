@@ -7,6 +7,7 @@ import { MessService } from 'src/app/services/mess.service';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { FileUploadService } from 'src/app/services/fileUpload.service';
 @Component({
   selector: 'app-mess-registration',
   templateUrl: './mess-registration.component.html',
@@ -25,7 +26,7 @@ export class MessRegistrationComponent {
     imageUploading: boolean = false;
     imageUrl: any = null;
   
-    constructor(private fb: FormBuilder, private router: Router, private messService: MessService, private authService: AuthService, private http: HttpClient) {
+    constructor(private fb: FormBuilder, private router: Router, private messService: MessService, private authService: AuthService, private http: HttpClient, private fileUploadService: FileUploadService) {  
       this.messForm = this.fb.group({
         name: ['', Validators.required],
         description: ['', Validators.required],
@@ -92,23 +93,22 @@ export class MessRegistrationComponent {
       }
     }
     
-    uploadImageToCloudinary(file: File): Observable<string> {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'mess_owner'); 
-      return this.http.post<any>('https://api.cloudinary.com/v1_1/dd8oitnyu/image/upload', formData)
-      .pipe(
-        map((response: any) => response.url)
-      );
-    }
+    // uploadImageToCloudinary(file: File): Observable<string> {
+    //   const formData = new FormData();
+    //   formData.append('file', file);
+    //   formData.append('upload_preset', 'mess_owner'); 
+    //   return this.http.post<any>('https://api.cloudinary.com/v1_1/dd8oitnyu/image/upload', formData)
+    //   .pipe(
+    //     map((response: any) => response.url)
+    //   );
+    // }
     
     onUploadImage(event: any) {
       const file = event.target.files[0];
       if (file) {
         this.selectedImageName = file.name;
         this.imageUploading = true;
-    
-        this.uploadImageToCloudinary(file).subscribe({
+        this.fileUploadService.uploadImageToCloudinary(file).subscribe({
           next: (url: any) => {
             this.imageUrl = url;
             this.imageUploading = false;
