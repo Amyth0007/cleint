@@ -117,7 +117,7 @@ export class DashboardComponent implements OnInit {
     private userService: UserService,
     private locationService: LocationService
   ) {
-    // this.directionsService = new google.maps.DirectionsService();
+    this.directionsService = new google.maps.DirectionsService();
     this.getmessLocations();
   }
 
