@@ -118,6 +118,27 @@ export class ThaliService {
       params: params
     });
   }
+  getMessSpecicficThalis(messId?: number, type?: string, date?: string): Observable<any> {
+    let params = new HttpParams();
+
+    if (messId) {
+      params = params.set('messId', messId.toString());
+    }
+
+    if (type) {
+      params = params.set('type', type);
+    }
+
+    if (date) {
+      params = params.set('date', date);
+    }
+
+    // If no filters are provided, this will get ALL thalis for the mess
+    return this.http.get(`${this.apiUrl}/get-mess-specific-thalis`, {
+      headers: this.getHeaders(),
+      params: params
+    });
+  }
 
   // Toggle publish status
   togglePublishStatus(thaliId: number, published: boolean): Observable<any> {

@@ -254,17 +254,19 @@ export class DashboardComponent implements OnInit {
 
     if (this.selectedCity === 'All') {
       const query = this.messNameSearchQuery.toLowerCase().trim();
-      return this.messLocations.filter(location =>
+      return this.messLocations.filter((location) =>
         location.name.toLowerCase().includes(query)
       );
     }
     let data = this.messLocations.filter(location => {
-      const matchesCity = this.selectedCity ? (location.city.toLocaleLowerCase()) === this.selectedCity.toLocaleLowerCase() : true;
+      const matchesCity = this.selectedCity ? (location.city.toLocaleLowerCase().trim()) === this.selectedCity.toLocaleLowerCase() : true;
       const matchesName = this.messNameSearchQuery
         ? location.name.toLowerCase().includes(this.messNameSearchQuery.toLowerCase().trim())
         : true;
       return matchesCity && matchesName;
     });
+    console.log(data);
+    
     return data;
   }
 

@@ -24,8 +24,7 @@ import { map } from 'rxjs/operators';
     CommonModule,
     ReactiveFormsModule,
     AuthInputComponent,
-    AuthButtonComponent,
-    NavbarComponent
+    AuthButtonComponent,    
   ]
 })
 export class MessOnwerUserProfileComponent implements OnInit {
@@ -159,15 +158,15 @@ export class MessOnwerUserProfileComponent implements OnInit {
   }
  
 
-      uploadImageToCloudinary(file: File): Observable<string> {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'mess_owner'); 
-        return this.http.post<any>('https://api.cloudinary.com/v1_1/dd8oitnyu/image/upload', formData)
-        .pipe(
-          map((response: any) => response.url)
-        );
-      }
+  uploadImageToCloudinary(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'mess_owner'); 
+    return this.http.post<any>('https://api.cloudinary.com/v1_1/dd8oitnyu/image/upload', formData)
+    .pipe(
+      map((response: any) => response.url)
+    );
+  }
 
   onUploadImage(event: any) {
     const file = event.target.files[0];
