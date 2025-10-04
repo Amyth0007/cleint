@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { OrderData, OrderResponse, OrdersResponse } from '../auth/interfaces/user.interface';
+import { MessOwnerIntentsResponse, OrderData, OrderResponse, OrdersResponse } from '../auth/interfaces/user.interface';
 
 
 
@@ -50,6 +50,21 @@ export class OrderService {
       catchError(error => {
         console.error('Error fetching user intents:', error);
         return of({ data: [] });
+      })
+    );
+  }
+
+  getMessIntents(): any {
+    const currentUser: any = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${currentUser.token}`);
+    
+    const url = `${environment.apiUrl}/get-mess-intents?userid=${currentUser.id || currentUser.userId}`;
+    
+    return this.http.get<MessOwnerIntentsResponse>(url, { headers }).pipe(
+      tap((response) => console.log('Fetched mess intents:', response)),
+      catchError(error => {
+        console.error('Error fetching mess intents:', error);
+        return of({ message: 'Error fetching intents', data: [] });
       })
     );
   }

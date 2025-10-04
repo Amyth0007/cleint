@@ -55,3 +55,25 @@ export interface OrdersResponse {
   success?: boolean;
   message?: string;
 }
+
+export interface MessOwnerIntentItem {
+  itemName: string;
+  quantity: number;
+  pricePerUnit: number;
+}
+
+export interface MessOwnerIntent {
+  orderId: number;
+  messId: number;
+  userId: number;
+  userName: string;
+  headCount: number;
+  totalAmount: number;
+  timestamp: string;
+  selectedItems: MessOwnerIntentItem[];
+}
+
+export interface MessOwnerIntentsResponse {
+  message: string;
+  data: MessOwnerIntent[];
+}
