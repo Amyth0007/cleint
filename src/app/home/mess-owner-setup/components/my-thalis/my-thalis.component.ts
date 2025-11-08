@@ -131,7 +131,7 @@ export class MyThalisComponent implements OnInit {
   // Date filter handler
   applyDateFilter(): void {
     console.log("selected date on selected date filter");
-    
+
     this.applyFilters();
   }
 
@@ -318,20 +318,18 @@ export class MyThalisComponent implements OnInit {
         // Find the thali in the array
         const index = this.thalis.findIndex(t => t.id === thali.id);
         if (index !== -1) {
-          // Set isDeleted = true for PostgreSQL
-          this.thalis[index].isDeleted = true;
-
           // Call backend service to update in database
-          // this.thaliService.softDeleteThali(thali.id).subscribe({
-          //   next: () => {
-          //     this.snackBar.showSuccess('Thali moved to trash');
-          //   },
-          //   error: (err:Error) => {
-          //     this.snackBar.showError('Failed to delete thali');
-          //     // Revert local change if API fails
-          //     this.thalis[index].isDeleted = false;
-          //   }
-          // });
+          this.thaliService.deleteThali(thali.id).subscribe({
+            next: () => {
+              this.loadThalis(); // This will call applyFilters() internally
+              this.snackBar.showSuccess('Thali moved to trash');
+            },
+            error: (err:Error) => {
+              this.snackBar.showError('Failed to delete thali');
+              // Revert local change if API fails
+              this.thalis[index].isDeleted = false;
+            }
+          });
         }
       }
     );
