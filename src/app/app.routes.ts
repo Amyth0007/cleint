@@ -71,13 +71,8 @@ export const routes: Routes = [
           children: [
             {
               path: '',
-              redirectTo: 'dash',
+              redirectTo: 'my-thalis',
               pathMatch: 'full'
-            },
-            {
-              path: 'dash',
-              loadComponent: () =>
-                import('./home/mess-owner-setup/components/dashboard/dashboard.component').then((m) => m.MessOwnerDashboardComponent),
             },
             {
               path: 'add-thali',

@@ -1,16 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-import { thaliTimeRangeValidator } from '../../shared/thali-time-range-validator';
-import { SnackBarService } from 'src/app/services/snack-bar.service';
-import { Thali, ThaliType } from 'src/app/auth/interfaces/thali.interface';
-import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
-import { EditingStateService } from 'src/app/services/editing-state.service';
-import { map, Observable, Subject, takeUntil } from 'rxjs';
-import { ThaliService } from 'src/app/services/thalis.service';
 import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { map, Observable, Subject, takeUntil } from 'rxjs';
+import { Thali, ThaliType } from 'src/app/auth/interfaces/thali.interface';
+import { EditingStateService } from 'src/app/services/editing-state.service';
+import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { ThaliService } from 'src/app/services/thalis.service';
+import { ConfirmDialogComponent } from '../../shared/confirm-dialog/confirm-dialog.component';
+import { thaliTimeRangeValidator } from '../../shared/thali-time-range-validator';
 
 @Component({
   selector: 'app-add-thali',
@@ -85,6 +84,8 @@ export class AddThaliComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log("ngOnInit", this.thaliData);
+    
     this.setupFormInitialState();
     this.setupFormLogic();
 
@@ -104,15 +105,21 @@ export class AddThaliComponent implements OnInit, OnDestroy {
   private setupFormInitialState(): void {
     if (this.thaliData) {
       this.patchThali(this.thaliData);
+      console.log(this.thaliData);
+      this.selectedImagePreview = this.thaliData.image;
+      this.selectedImage = new File([], this.thaliData.image) as File;
+      this.imageUrl = this.thaliData.image;
+      this.selectedImageName = this.thaliData.image;
+      this.imageUploading = false;
       this.previewUrl = this.thaliData.image || null;
     }
 
     if (this.isEditing) {
       this.enableEditMode();
     } else if (this.readonly) {
-      this.thaliForm.disable();
+      this.thaliForm.disable({ emitEvent: false });
     } else {
-      this.thaliForm.enable();
+      this.thaliForm.enable({ emitEvent: false });
     }
   }
 
@@ -120,9 +127,9 @@ export class AddThaliComponent implements OnInit, OnDestroy {
     if (this.isEditing) {
       this.enableEditMode();
     } else if (this.readonly) {
-      this.thaliForm.disable();
+      this.thaliForm.disable({ emitEvent: false });
     } else {
-      this.thaliForm.enable();
+      this.thaliForm.enable({ emitEvent: false });
     }
   }
 
@@ -130,18 +137,28 @@ export class AddThaliComponent implements OnInit, OnDestroy {
     // Sweet logic
     this.getControl('sweet')?.valueChanges.subscribe((value: string) => {
       const sweetInfoControl = this.getControl('sweetInfo');
-      value === 'yes' ? sweetInfoControl?.enable() : (sweetInfoControl?.disable(), sweetInfoControl?.reset());
+      if (value === 'yes') {
+        sweetInfoControl?.enable({ emitEvent: false });
+      } else {
+        sweetInfoControl?.disable({ emitEvent: false });
+        sweetInfoControl?.reset();
+      }
     });
 
     // Daal logic
     this.getControl('daal')?.valueChanges.subscribe((value: string) => {
       const daalReplacementControl = this.getControl('daalReplacement');
-      value === 'no' ? daalReplacementControl?.enable() : (daalReplacementControl?.disable(), daalReplacementControl?.reset());
+      if (value === 'no') {
+        daalReplacementControl?.enable({ emitEvent: false });
+      } else {
+        daalReplacementControl?.disable({ emitEvent: false });
+        daalReplacementControl?.reset();
+      }
     });
 
     // Initial daal replacement state
     if (this.getControl('daal')?.value !== 'no') {
-      this.getControl('daalReplacement')?.disable();
+      this.getControl('daalReplacement')?.disable({ emitEvent: false });
     }
 
     // Time range logic
@@ -163,6 +180,8 @@ export class AddThaliComponent implements OnInit, OnDestroy {
   }
 
   patchThali(thali: Thali): void {
+    console.log(thali);
+    
     this.thaliForm.patchValue({
       thaliName: thali.thaliName,
       rotis: thali.rotis,
@@ -195,13 +214,13 @@ export class AddThaliComponent implements OnInit, OnDestroy {
 
   enableEditMode(): void {
     this.isEditing = true;
-    this.thaliForm.enable();
+    this.thaliForm.enable({ emitEvent: false });
 
     if (this.getControl('daal')?.value !== 'no') {
-      this.getControl('daalReplacement')?.disable();
+      this.getControl('daalReplacement')?.disable({ emitEvent: false });
     }
     if (this.getControl('sweet')?.value !== 'yes') {
-      this.getControl('sweetInfo')?.disable();
+      this.getControl('sweetInfo')?.disable({ emitEvent: false });
     }
   }
 

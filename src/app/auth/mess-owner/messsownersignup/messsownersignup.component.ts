@@ -9,7 +9,6 @@ import { AuthButtonComponent } from '../../shared/auth-button/auth-button.compon
 import { AuthInputComponent } from '../../shared/auth-input/auth-input.component';
 import { AuthLayoutComponent } from '../../shared/auth-layout/auth-layout.component';
 import { AuthSeparatorComponent } from "../../shared/auth-separator/auth-separator.component";
-import { AuthSocialButtonComponent } from "../../shared/auth-social-button/auth-social-button.component";
 import { userRole } from '../../interfaces/user.interface';
 
 @Component({
@@ -21,7 +20,6 @@ import { userRole } from '../../interfaces/user.interface';
     AuthInputComponent,
     AuthButtonComponent,
     AuthLayoutComponent,
-    AuthSocialButtonComponent,
     AuthSeparatorComponent
   ],
   templateUrl: './messsownersignup.component.html',

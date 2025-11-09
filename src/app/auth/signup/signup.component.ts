@@ -7,7 +7,6 @@ import { AuthButtonComponent } from '../shared/auth-button/auth-button.component
 import { AuthInputComponent } from '../shared/auth-input/auth-input.component';
 import { AuthLayoutComponent } from '../shared/auth-layout/auth-layout.component';
 import { AuthSeparatorComponent } from "../shared/auth-separator/auth-separator.component";
-import { AuthSocialButtonComponent } from "../shared/auth-social-button/auth-social-button.component";
 import { passwordMatchValidator } from '../shared/validators/password-match.validator';
 import { SnackBarService } from 'src/app/services/snack-bar.service';
 import { userRole } from '../interfaces/user.interface';
@@ -24,7 +23,6 @@ import { userRole } from '../interfaces/user.interface';
     AuthButtonComponent,
     AuthLayoutComponent,
     AuthSeparatorComponent,
-    AuthSocialButtonComponent
   ]
 })
 export class SignupComponent {

@@ -1,13 +1,11 @@
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/auth-service/auth.service';
-import { MessService } from 'src/app/services/mess.service';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 import { FileUploadService } from 'src/app/services/fileUpload.service';
+import { MessService } from 'src/app/services/mess.service';
 @Component({
   selector: 'app-mess-registration',
   templateUrl: './mess-registration.component.html',
@@ -103,8 +101,9 @@ export class MessRegistrationComponent {
     //   );
     // }
     
-    onUploadImage(event: any) {
-      const file = event.target.files[0];
+    onUploadImage(event: Event) {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.[0];
       if (file) {
         this.selectedImageName = file.name;
         this.imageUploading = true;
@@ -124,8 +123,8 @@ export class MessRegistrationComponent {
   
     onSubmit() {
       this.submitted = true;
-      if (this.messForm.invalid || !this.lat || !this.lng || !this.address) {
-        alert('Please fill all required fields and detect location.');
+      if (this.messForm.invalid || !this.lat || !this.lng || !this.address || !this.imageUrl) {
+        alert('Please fill all required fields, detect location, and upload an image.');
         return;
       }
       this.registering = true;

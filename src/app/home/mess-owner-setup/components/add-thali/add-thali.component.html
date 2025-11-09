@@ -5,7 +5,7 @@
   <div class="form-control-group">
     <div class="input-row">
       <label for="thaliName">Thali Name: <span class="required">*</span></label>
-      <input type="text" formControlName="thaliName" id="thaliName" [readonly]="readonly && !isEditing" />
+      <input type="text" formControlName="thaliName" id="thaliName" />
     </div>
     <div class="error" *ngIf="thaliForm.get('thaliName')?.touched && thaliForm.get('thaliName')?.invalid">
       Thali name is required.
@@ -16,7 +16,7 @@
   <div class="form-control-group">
     <div class="input-row">
       <label>Number of Rotis: <span class="required">*</span></label>
-      <input type="number" formControlName="rotis" min="0" [readonly]="readonly && !isEditing" />
+      <input type="number" formControlName="rotis" min="0" />
     </div>
     <div class="error" *ngIf="thaliForm.get('rotis')?.touched && thaliForm.get('rotis')?.invalid">
       Number of rotis is required.
@@ -27,7 +27,7 @@
   <div class="form-control-group">
     <div class="input-row">
       <label>Sabzi: <span class="required">*</span></label>
-      <input type="text" formControlName="sabzi" [readonly]="readonly && !isEditing" />
+      <input type="text" formControlName="sabzi" />
     </div>
     <div class="error" *ngIf="thaliForm.get('sabzi')?.touched && thaliForm.get('sabzi')?.invalid">
       Sabzi is required.
@@ -39,8 +39,8 @@
     <div class="input-row">
       <label>Daal: <span class="required">*</span></label>
       <div class="checkbox-group">
-        <label><input type="radio" formControlName="daal" value="yes" [disabled]="readonly && !isEditing" /> Yes</label>
-        <label><input type="radio" formControlName="daal" value="no" [disabled]="readonly && !isEditing" /> No</label>
+        <label><input type="radio" formControlName="daal" value="yes" /> Yes</label>
+        <label><input type="radio" formControlName="daal" value="no" /> No</label>
       </div>
     </div>
     <div class="error" *ngIf="thaliForm.get('daal')?.touched && thaliForm.get('daal')?.invalid">
@@ -48,8 +48,7 @@
     </div>
     <div class="input-row" *ngIf="thaliForm.get('daal')?.value === 'no'">
       <label>Daal Replacement:</label>
-      <input type="text" formControlName="daalReplacement" placeholder="Daal Replacement"
-        [readonly]="readonly && !isEditing" />
+      <input type="text" formControlName="daalReplacement" placeholder="Daal Replacement" />
     </div>
   </div>
 
@@ -58,8 +57,8 @@
     <div class="input-row">
       <label>Rice: <span class="required">*</span></label>
       <div class="checkbox-group">
-        <label><input type="radio" formControlName="rice" value="yes" [disabled]="readonly && !isEditing" /> Yes</label>
-        <label><input type="radio" formControlName="rice" value="no" [disabled]="readonly && !isEditing" /> No</label>
+        <label><input type="radio" formControlName="rice" value="yes" /> Yes</label>
+        <label><input type="radio" formControlName="rice" value="no" /> No</label>
       </div>
     </div>
     <div class="error" *ngIf="thaliForm.get('rice')?.touched && thaliForm.get('rice')?.invalid">
@@ -72,9 +71,9 @@
     <div class="input-row">
       <label>Salad:</label>
       <div class="checkbox-group">
-        <label><input type="radio" formControlName="salad" value="yes" [disabled]="readonly && !isEditing" />
+        <label><input type="radio" formControlName="salad" value="yes" />
           Yes</label>
-        <label><input type="radio" formControlName="salad" value="no" [disabled]="readonly && !isEditing" /> No</label>
+        <label><input type="radio" formControlName="salad" value="no" /> No</label>
       </div>
     </div>
   </div>
@@ -84,15 +83,14 @@
     <div class="input-row">
       <label>Sweet:</label>
       <div class="checkbox-group">
-        <label><input type="radio" formControlName="sweet" value="yes" [disabled]="readonly && !isEditing" />
+        <label><input type="radio" formControlName="sweet" value="yes" />
           Yes</label>
-        <label><input type="radio" formControlName="sweet" value="no" [disabled]="readonly && !isEditing" /> No</label>
+        <label><input type="radio" formControlName="sweet" value="no" /> No</label>
       </div>
     </div>
     <div class="input-row" *ngIf="thaliForm.get('sweet')?.value === 'yes'">
       <label>Sweet Info:</label>
-      <input type="text" formControlName="sweetInfo" placeholder="Sweet Description"
-        [readonly]="readonly && !isEditing" />
+      <input type="text" formControlName="sweetInfo" placeholder="Sweet Description" />
     </div>
   </div>
 
@@ -100,7 +98,7 @@
   <div class="form-control-group">
     <div class="input-row">
       <label>Other Items:</label>
-      <input type="text" formControlName="otherItems" [readonly]="readonly && !isEditing" />
+      <input type="text" formControlName="otherItems" />
     </div>
   </div>
 
@@ -110,7 +108,7 @@
       <label>Thali Type: <span class="required">*</span></label>
       <div class="checkbox-group">
         <label *ngFor="let type of thaliTypes">
-          <input type="radio" formControlName="type" [value]="type" [disabled]="readonly && !isEditing" />
+          <input type="radio" formControlName="type" [value]="type" />
           {{ type | titlecase }}
         </label>
       </div>
@@ -124,8 +122,7 @@
   <div class="form-control-group">
     <div class="input-row">
       <label>Available From: <span class="required">*</span></label>
-      <input type="time" formControlName="availableFrom" [min]="timeMin" [max]="timeMax"
-        [readonly]="readonly && !isEditing" />
+      <input type="time" formControlName="availableFrom" [min]="timeMin" [max]="timeMax" />
     </div>
     <div class="error" *ngIf="thaliForm.get('availableFrom')?.touched && thaliForm.get('availableFrom')?.invalid">
       Available from time is required.
@@ -136,8 +133,7 @@
   <div class="form-control-group">
     <div class="input-row">
       <label>Available Until: <span class="required">*</span></label>
-      <input type="time" formControlName="availableUntil" [min]="timeMin" [max]="timeMax"
-        [readonly]="readonly && !isEditing" />
+      <input type="time" formControlName="availableUntil" [min]="timeMin" [max]="timeMax" />
     </div>
     <div class="error" *ngIf="thaliForm.get('availableUntil')?.touched && thaliForm.get('availableUntil')?.invalid">
       Available until time is required.
@@ -156,7 +152,7 @@
   <div class="form-control-group">
     <div class="input-row">
       <label>Price (₹): <span class="required">*</span></label>
-      <input type="number" formControlName="price" [readonly]="readonly && !isEditing" />
+      <input type="number" formControlName="price" />
     </div>
     <div class="error" *ngIf="thaliForm.get('price')?.touched && thaliForm.get('price')?.invalid">
       Price is required and must be at least ₹1.
@@ -166,7 +162,7 @@
   <!-- Thali Image -->
 
     <div class="form-group">
-            <label class="input-label">Mess Image</label>
+            <label class="input-label">Thali Image</label>
             <div class="upload-container" 
                  (drop)="onDrop($event)"
                  (dragover)="onDragOver($event)"

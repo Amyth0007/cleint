@@ -33,15 +33,26 @@
       </div>
       <div class="input-group">
         <label class="upload-label">
-          <input type="file" (change)="onUploadImage($event)" hidden />
+          <input type="file" (change)="onUploadImage($event)" accept="image/*" hidden />
           <span class="material-icons upload-icon">upload_file</span> Upload Mess Image
         </label>
-        <div class="file-info" *ngIf="selectedImageName">
+        <div class="file-info" *ngIf="selectedImageName && !imageUrl">
           <span class="material-icons">insert_drive_file</span> {{ selectedImageName }}
+        </div>
+        <div class="image-preview-container" *ngIf="imageUrl">
+          <img [src]="imageUrl" alt="Mess preview" class="image-preview" />
+          <div class="image-preview-overlay">
+            <span class="material-icons check-icon">check_circle</span>
+            <span class="image-uploaded-text">Image uploaded successfully</span>
+          </div>
+        </div>
+        <div class="uploading-indicator" *ngIf="imageUploading">
+          <span class="material-icons spinning">sync</span>
+          <span>Uploading image...</span>
         </div>
       </div>
       <div class="setup-footer">
-        <button class="setup-btn register" [disabled]="registering && !imageUploading" type="submit">
+        <button class="setup-btn register" [disabled]="registering || imageUploading || !imageUrl" type="submit">
           Register Mess (CTA)
         </button>
       </div>
