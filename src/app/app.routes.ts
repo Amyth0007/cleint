@@ -42,6 +42,11 @@ export const routes: Routes = [
           import('./home/orders/orders.component').then((m) => m.OrdersComponent),
         canActivate: [AuthGuard]
     },
+    {
+  path: '**',
+  redirectTo: '',
+  pathMatch: 'full'
+},
     // Mess Owner Routes
     {
       path: 'mess-owner',
