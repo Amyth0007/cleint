@@ -39,6 +39,7 @@
           <img [src]="item.imageUrl" 
                [alt]="item.name"
                class="menu-item-image"
+               (error)="handleImageError($event)"
                loading="lazy">
           
           <div class="veg-indicator" [class.non-veg]="!item.isVegetarian">
@@ -133,7 +134,7 @@
         <span *ngIf="isSharingIntent">⏳ Sharing Intent...</span>
       </button>
       <p class="intent-description">
-        Let the mess owner know you're coming!
+        Let the mess owner know you're coming !
       </p>
     </div>
   </div>
