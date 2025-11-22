@@ -23,8 +23,8 @@ export class MessRegistrationComponent {
     addressLoading: boolean = false;
     imageUploading: boolean = false;
     imageUrl: any = null;
-  
-    constructor(private fb: FormBuilder, private router: Router, private messService: MessService, private authService: AuthService, private http: HttpClient, private fileUploadService: FileUploadService) {  
+
+    constructor(private fb: FormBuilder, private router: Router, private messService: MessService, private authService: AuthService, private http: HttpClient, private fileUploadService: FileUploadService) {
       this.messForm = this.fb.group({
         name: ['', Validators.required],
         description: ['', Validators.required],
@@ -34,27 +34,27 @@ export class MessRegistrationComponent {
         location: ['']
       });
     }
-  
+
 
     async onDetectLocation() {
       if (!navigator.geolocation) {
         alert('Geolocation is not supported by your browser.');
         return;
       }
-    
+
       this.addressLoading = true;
-    
+
       try {
         const position = await this.getCurrentPosition();
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
-    
+
         this.lat = lat;
         this.lng = lng;
-    
+
         const address = await this.reverseGeocode(lat, lng);
         this.address = address || 'Address not found';
-    
+
         this.messForm.patchValue({ location: this.address });
       } catch (error) {
         console.error('Location detection failed:', error);
@@ -64,7 +64,7 @@ export class MessRegistrationComponent {
         this.addressLoading = false;
       }
     }
-    
+
     private getCurrentPosition(): Promise<GeolocationPosition> {
       return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
@@ -74,7 +74,7 @@ export class MessRegistrationComponent {
         });
       });
     }
-    
+
     private async reverseGeocode(lat: number, lng: number): Promise<string | null> {
       const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
       try {
@@ -90,17 +90,17 @@ export class MessRegistrationComponent {
         return null;
       }
     }
-    
+
     // uploadImageToCloudinary(file: File): Observable<string> {
     //   const formData = new FormData();
     //   formData.append('file', file);
-    //   formData.append('upload_preset', 'mess_owner'); 
+    //   formData.append('upload_preset', 'mess_owner');
     //   return this.http.post<any>('https://api.cloudinary.com/v1_1/dd8oitnyu/image/upload', formData)
     //   .pipe(
     //     map((response: any) => response.url)
     //   );
     // }
-    
+
     onUploadImage(event: Event) {
       const target = event.target as HTMLInputElement;
       const file = target.files?.[0];
@@ -119,8 +119,8 @@ export class MessRegistrationComponent {
         });
       }
     }
-    
-  
+
+
     onSubmit() {
       this.submitted = true;
       if (this.messForm.invalid || !this.lat || !this.lng || !this.address || !this.imageUrl) {
@@ -151,7 +151,7 @@ export class MessRegistrationComponent {
       this.messService.createMess(messData).subscribe({
         next: (createdMess) => {
           this.registering = false;
-          this.router.navigate(['/mess-owner/setup/dash']);
+          this.router.navigate(['/mess-owner/setup/my-thalis']);
         },
         error: (error) => {
           this.registering = false;

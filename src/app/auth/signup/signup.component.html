@@ -1,5 +1,5 @@
 <app-auth-layout title="Sign Up">
-  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-4">
+  <form [formGroup]="signupForm" class="space-y-4">
     <app-auth-input
       label="Name"
       placeholder="Enter your name"
@@ -30,7 +30,7 @@
     </div>
 
     <div class="space-y-4">
-      <app-auth-button 
+      <app-auth-button
         [text]="isLoading ? 'Signing up...' : 'Sign Up'"
         [onClick]="onSubmit.bind(this)"
       ></app-auth-button>

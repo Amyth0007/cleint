@@ -76,7 +76,7 @@ export class MesssownersignupComponent {
               const currentUser = this.authService.currentUserValue;
               const userId = currentUser?.id || currentUser?.userId;
               console.log(userId);
-              
+
               if (!userId) {
                 this.router.navigate(['/mess-owner/initial-setup']);
                 return;
@@ -86,7 +86,7 @@ export class MesssownersignupComponent {
                   console.log(result);
                   
                   if (result?.exists) {
-                    this.router.navigate(['/mess-owner/setup/dash']);
+                    this.router.navigate(['/mess-owner/setup/my-thalis']);
                   } else {
                     this.router.navigate(['/mess-owner/initial-setup']);
                   }
@@ -117,4 +117,4 @@ export class MesssownersignupComponent {
   signUpWithFacebook = () => {
     console.log('Facebook signup');
   };
-} 
+}

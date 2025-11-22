@@ -83,7 +83,7 @@ export class MessOwnerLoginComponent {
               this.messService.checkMessExists(userId).subscribe({
                 next: (result) => {
                   if (result?.exists) {
-                    this.router.navigate(['/mess-owner/setup/dash']);
+                    this.router.navigate(['/mess-owner/setup/my-thalis']);
                   } else {
                     this.router.navigate(['/mess-owner/initial-setup']);
                   }
