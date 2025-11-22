@@ -33,8 +33,7 @@ export class LocationService {
       this.http.get(`${this.locationIqBaseUrl}/reverse`, { params: params as any })
         .subscribe({
           next: (response: any) => {
-            console.log('LocationIQ Response:', response);
-            
+
             if (response && response.address) {
               // Try to get city from different possible fields
               const city = response.address.city || 
@@ -42,10 +41,8 @@ export class LocationService {
                           response.address.state;
               
               if (city) {
-                console.log('Found city from LocationIQ:', city);
                 resolve(city);
               } else {
-                console.log('No city found in LocationIQ response:', response);
                 reject('City not found in address components');
               }
             } else {

@@ -10,6 +10,7 @@ import { AuthInputComponent } from '../../shared/auth-input/auth-input.component
 import { AuthLayoutComponent } from '../../shared/auth-layout/auth-layout.component';
 import { AuthSeparatorComponent } from "../../shared/auth-separator/auth-separator.component";
 import { userRole } from '../../interfaces/user.interface';
+import { passwordMatchValidator } from '../../shared/validators/password-match.validator';
 
 @Component({
   selector: 'app-messsownersignup',
@@ -37,11 +38,12 @@ export class MesssownersignupComponent {
     private snackBar: MatSnackBar,
     private messService: MessService
   ) {
-    this.signupForm = this.fb.group({
-      username: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
+       this.signupForm = this.fb.group({
+         username: ['', [Validators.required, Validators.minLength(3)]],
+         email: ['', [Validators.required, Validators.email]],
+         password: ['', [Validators.required, Validators.minLength(6)]],
+         confirmPassword: ['', [Validators.required]]
+       }, { validator: passwordMatchValidator });
   }
 
   showSuccess() {
@@ -75,7 +77,6 @@ export class MesssownersignupComponent {
             setTimeout(async () => {
               const currentUser = this.authService.currentUserValue;
               const userId = currentUser?.id || currentUser?.userId;
-              console.log(userId);
 
               if (!userId) {
                 this.router.navigate(['/mess-owner/initial-setup']);
@@ -83,7 +84,7 @@ export class MesssownersignupComponent {
               }
               this.messService.checkMessExists(userId).subscribe({
                 next: (result) => {
-                  console.log(result);
+
                   
                   if (result?.exists) {
                     this.router.navigate(['/mess-owner/setup/my-thalis']);
@@ -110,11 +111,5 @@ export class MesssownersignupComponent {
     }
   }
 
-  signUpWithGoogle = () => {
-    console.log('Google signup');
-  };
 
-  signUpWithFacebook = () => {
-    console.log('Facebook signup');
-  };
 }

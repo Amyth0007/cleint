@@ -26,7 +26,6 @@ export class ConfigService {
       this.config = await firstValueFrom(
         this.http.get<Config>(`${environment.apiUrl}/auth/config`, { headers })
       );
-      console.log(this.config);
 
       return this.config.googleMapsApiKey;
     } catch (error) {

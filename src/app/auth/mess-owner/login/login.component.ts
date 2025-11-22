@@ -107,13 +107,6 @@ export class MessOwnerLoginComponent {
     }
   }
 
-  logInWithGoogle = () => {
-    console.log('Google login');
-  };
-
-  logInWithFacebook = () => {
-    console.log('Facebook login');
-  };
 
 
 }

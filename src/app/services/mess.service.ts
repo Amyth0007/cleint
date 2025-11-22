@@ -39,7 +39,6 @@ export class MessService {
   }
 
   updateMess(data: any){
-    console.log(data);
     
     const currentUser : any = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${currentUser["token"]}`);

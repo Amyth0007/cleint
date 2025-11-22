@@ -84,8 +84,7 @@ export class AddThaliComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log("ngOnInit", this.thaliData);
-    
+
     this.setupFormInitialState();
     this.setupFormLogic();
 
@@ -105,7 +104,6 @@ export class AddThaliComponent implements OnInit, OnDestroy {
   private setupFormInitialState(): void {
     if (this.thaliData) {
       this.patchThali(this.thaliData);
-      console.log(this.thaliData);
       this.selectedImagePreview = this.thaliData.image;
       this.selectedImage = new File([], this.thaliData.image) as File;
       this.imageUrl = this.thaliData.image;
@@ -180,8 +178,7 @@ export class AddThaliComponent implements OnInit, OnDestroy {
   }
 
   patchThali(thali: Thali): void {
-    console.log(thali);
-    
+
     this.thaliForm.patchValue({
       thaliName: thali.thaliName,
       rotis: thali.rotis,

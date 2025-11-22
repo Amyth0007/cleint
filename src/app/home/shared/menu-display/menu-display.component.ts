@@ -58,8 +58,7 @@ export class MenuDisplayComponent implements OnInit, OnChanges{
   };
 
   constructor(private orderService: OrderService,  private thaliService: ThaliService,) {
-    console.log(this.messId);
-    
+
   }
  
   ngOnInit(): void {

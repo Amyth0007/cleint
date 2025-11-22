@@ -78,7 +78,6 @@ export class LoginComponent implements OnInit {
       this.errorMessage = '';
 
       const { email, password } = this.loginForm.value;
-      console.log(email, password, this.isMessOwnerLogin);
 
       this.authService.login(email, password).subscribe({
         next: (response) => {
@@ -106,11 +105,4 @@ export class LoginComponent implements OnInit {
 
   }
 
-  logInWithGoogle = () => {
-    console.log('Google login');
-  };
-
-  logInWithFacebook = () => {
-    console.log('Facebook login');
-  };
 }

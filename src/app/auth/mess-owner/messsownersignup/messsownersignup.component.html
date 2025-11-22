@@ -4,6 +4,13 @@
         <app-auth-input label="Email" placeholder="Enter your email" type="email" [control]="signupForm.controls['email']" />
         <app-auth-input label="Password" placeholder="Enter your password" type="password"
             [control]="signupForm.controls['password']" />
+        <app-auth-input label="Confirm Password" type="password" placeholder="Confirm your password"
+      [control]="signupForm.controls['confirmPassword']"></app-auth-input>
+
+    <div *ngIf="signupForm.get('confirmPassword')?.hasError('mismatch') && signupForm.get('confirmPassword')?.touched"
+      class="text-red-500 text-sm">
+      Passwords do not match
+    </div>
 
         <app-auth-button [text]="isLoading ? 'Signing up...' : 'Sign Up'" [onClick]="onSubmit.bind(this)"></app-auth-button>
     </form>

@@ -60,24 +60,18 @@ export class EnterOtpComponent {
   verifyOtp() {
     if (this.otpForm.valid) {
       const otp = Object.values(this.otpForm.value).join('');
-      console.log('OTP Entered:', otp);
       // Simulate OTP verification logic (API call can go here)
       if (otp === '123456') { // Dummy OTP for testing
         this.otpVerified = true;
-        console.log('OTP Verified');
         // Navigate to the next step (e.g., home page)
         this.router.navigate(['/home']);
-      } else {
-        console.log('Invalid OTP');
       }
     } else {
-      console.log('Please enter a valid OTP');
     }
   }
 
   // Function to handle Resend OTP functionality
   resendOtp() {
-    console.log('Resend OTP');
     // Call API or trigger resend OTP logic here
     // After successful resend, show a message or handle UI accordingly
   }

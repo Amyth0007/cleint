@@ -9,6 +9,7 @@ import { ThaliService } from 'src/app/services/thalis.service';
 import { AuthService } from 'src/app/auth/services/auth-service/auth.service';
 import { Subject } from 'rxjs';
 import { EditingStateService } from 'src/app/services/editing-state.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-my-thalis',
@@ -122,16 +123,12 @@ export class MyThalisComponent implements OnInit {
       const dateMatch =
         this.selectedDate === '' ||
         (thali.available_date && thali.available_date === this.selectedDate);
-      console.log('thali date', thali.available_date)
-      console.log('selected date', this.selectedDate);
-      return nameMatch && statusMatch && dateMatch;
+        return nameMatch && statusMatch && dateMatch;
     });
   }
 
   // Date filter handler
   applyDateFilter(): void {
-    console.log("selected date on selected date filter");
-
     this.applyFilters();
   }
 
@@ -183,20 +180,20 @@ export class MyThalisComponent implements OnInit {
           // Optimistic UI update
           this.thalis[index].published = newPublishedState;
 
-          // this.thaliService.togglePublishStatus(thali.id, newPublishedState).subscribe({
-          //   next: () => {
-          //     this.snackBar.showSuccess(
-          //       `Thali ${newPublishedState ? 'published' : 'unpublished'} successfully`
-          //     );
-          //   },
-          //   error: (err: HttpErrorResponse) => {
-          //     // Revert on error
-          //     this.thalis[index].published = thali.published;
-          //     this.snackBar.showError(
-          //       `Failed to ${action} thali: ${err.error?.message || 'Please try again'}`
-          //     );
-          //   }
-          // });
+          this.thaliService.togglePublishStatus(thali.id, newPublishedState).subscribe({
+            next: () => {
+              this.snackBar.showSuccess(
+                `Thali ${newPublishedState ? 'published' : 'unpublished'} successfully`
+              );
+            },
+            error: (err: HttpErrorResponse) => {
+              // Revert on error
+              this.thalis[index].published = thali.published;
+              this.snackBar.showError(
+                `Failed to ${action} thali: ${err.error?.message || 'Please try again'}`
+              );
+            }
+          });
         }
       }
     );

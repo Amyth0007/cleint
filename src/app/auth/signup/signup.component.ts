@@ -91,12 +91,6 @@ export class SignupComponent {
       });
     }
   }
-  signUpWithGoogle = () => {
-    console.log('Google sign-up');
-  };
 
-  signUpWithFacebook = () => {
-    console.log('Facebook sign-up');
-  };
 }
 

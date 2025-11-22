@@ -32,7 +32,6 @@ export class OrdersComponent implements OnInit {
       next: (response: OrdersResponse) => {
         this.orders = response.data;
         this.isLoading = false;
-        console.log(this.orders);
       },
       error: (error) => {
         console.error('Failed to load intents:', error);
@@ -43,22 +42,27 @@ export class OrdersComponent implements OnInit {
     });
   }
 
-  getOrderDate(timestamp: string): string {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  }
+getOrderDate(timestamp: string): string {
+  const date = new Date(timestamp);
+  const today = new Date();
+
+  // Normalize both dates to midnight
+  const d1 = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const d2 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  const diff = (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24);
+
+  if (diff === 0) return 'Today';
+  if (diff === 1) return 'Yesterday';
+  if (diff > 1 && diff < 7) return `${Math.floor(diff)} days ago`;
+
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+}
+
 
   getOrderTime(timestamp: string): string {
     const date = new Date(timestamp);
@@ -90,13 +94,11 @@ export class OrdersComponent implements OnInit {
   }
 
   viewOrderDetails(order: UserOrder) {
-    console.log('Viewing intent details:', order);
     // TODO: Implement intent details view
     alert(`Intent Details for ${order.messName}\nIntent ID: ${this.getOrderId(order)}\nTotal Amount: ₹${order.totalAmount}`);
   }
 
   cancelOrder(order: UserOrder) {
-    console.log('Cancelling intent:', order);
     // TODO: Implement intent cancellation
     if (confirm(`Are you sure you want to cancel your intent for ${order.messName}?`)) {
       alert('Intent cancellation feature will be implemented soon!');
