@@ -16,10 +16,10 @@ export class messOwnerGuard implements CanActivate {
       if (this.authService.isMessOwner()) {
         // If mess owner tries to access root, redirect to their dashboard
         if (state.url === '/' || state.url === '') {
-          this.router.navigate(['/mess-owner/setup/dash']);
+          this.router.navigate(['/mess-owner/setup/my-thalis']);
         } else {
           // Block mess owner from accessing user routes
-          this.router.navigate(['/mess-owner/setup/dash']);
+          this.router.navigate(['/mess-owner/setup/my-thalis']);
         }
         return false;
       }

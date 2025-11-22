@@ -175,11 +175,11 @@ export class DashboardComponent implements OnInit {
   }
 
   async getUserLocation() {
-    console.log('Getting user location...');
+    
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
-          console.log('User location received:', position.coords);
+          
           this.userLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -200,12 +200,11 @@ export class DashboardComponent implements OnInit {
             );
 
             if (foundCity) {
-              console.log('Found matching city in our list:', foundCity);
+              
               this.selectedCity = foundCity;
               this.updateFilteredLocations();
             } else {
-              console.log('No matching city found in our list. Available cities:', this.topCities.filter(city => city !== 'All'));
-              console.log('Geocoded city from LocationIQ:', this.userCity);
+              
               this.selectedCity = 'All';
             }
           } catch (error) {
@@ -229,7 +228,7 @@ export class DashboardComponent implements OnInit {
         }
       );
     } else {
-      console.log('Geolocation not supported, using default location');
+      
       // Fallback for browsers that don't support geolocation
       this.userLocation = { lat: 18.5204, lng: 73.8567 };
       this.updateRouteDistances();
@@ -239,7 +238,7 @@ export class DashboardComponent implements OnInit {
   getmessLocations() {
     this.locationService.getLocations().subscribe({
       next: (data: any) => {
-        console.log(data.data);
+        
 
         this.messLocations = data.data
       },
@@ -265,18 +264,18 @@ export class DashboardComponent implements OnInit {
         : true;
       return matchesCity && matchesName;
     });
-    console.log(data);
+    
     
     return data;
   }
 
   async updateRouteDistances() {
     if (!this.userLocation) {
-      console.log('No user location available for distance calculation');
+      
       return;
     }
 
-    console.log('Updating route distances from user location:', this.userLocation);
+    
 
     // Update straight-line distances first
     this.messLocations = this.messLocations.map(location => ({
@@ -346,7 +345,7 @@ export class DashboardComponent implements OnInit {
   }
 
   selectLocation(location: Location) {
-    console.log('Location selected:', location);
+    
     this.selectedLocation = { ...location };
 
     // Scroll to menu section after a short delay to ensure component is rendered

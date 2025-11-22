@@ -10,6 +10,7 @@ import { AuthInputComponent } from '../shared/auth-input/auth-input.component';
 import { AuthLayoutComponent } from '../shared/auth-layout/auth-layout.component';
 import { AuthSeparatorComponent } from "../shared/auth-separator/auth-separator.component";
 import { SnackBarService } from 'src/app/services/snack-bar.service';
+import { userRole } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-login',
@@ -38,7 +39,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private snackBarService: SnackBarService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -77,11 +79,15 @@ export class LoginComponent implements OnInit {
 
       const { email, password } = this.loginForm.value;
       console.log(email, password, this.isMessOwnerLogin);
-  
+
       this.authService.login(email, password).subscribe({
         next: (response) => {
           if (response.success) {
-            this.showSuccess();
+            if (this.authService.currentUserValue.role !== userRole.customer) {
+              this.snackBarService.showError('⚠️ This is a customer login. Cannot login as mess owner.');
+              return;
+            }
+            this.showSuccess()
             setTimeout(() => {
               this.router.navigate([this.returnUrl]);
             }, 500);
@@ -96,8 +102,8 @@ export class LoginComponent implements OnInit {
           this.isLoading = false;
         }
       });
-      }
-    
+    }
+
   }
 
   logInWithGoogle = () => {
