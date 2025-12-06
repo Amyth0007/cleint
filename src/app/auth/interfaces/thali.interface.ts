@@ -10,11 +10,11 @@ export interface Thali {
   // Required fields
   rotis: number;
   sabzi: string;
-  daal: string;
+  daal: boolean;
   daalReplacement: string;
-  rice: string;
-  salad: string;
-  sweet: string;
+  rice: boolean;
+  salad: boolean;
+  sweet: boolean;
   sweetInfo: string;
   otherItems: string;
   price: number;

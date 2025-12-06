@@ -1,0 +1,13 @@
+<div class="snackbar" [ngClass]="data.type">
+
+  <div class="icon">
+    <mat-icon>{{ data.icon }}</mat-icon>
+  </div>
+
+  <div class="message">
+    {{ data.message }}
+  </div>
+
+  <button class="close-btn" (click)="close()">✖</button>
+
+</div>

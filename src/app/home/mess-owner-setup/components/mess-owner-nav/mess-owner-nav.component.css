@@ -44,7 +44,12 @@
   background: transparent;
 }
 
-.navbar-center a.active, .navbar-center a:hover {
+.navbar-center a.active {
+  background: #fbbf24;
+  color: #23232a;
+}
+
+.navbar-center a:hover {
   background: #fbbf24;
   color: #23232a;
 }

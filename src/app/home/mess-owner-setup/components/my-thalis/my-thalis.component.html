@@ -1,7 +1,9 @@
 <!-- my-thalis.component.html -->
 <div class="container">
-  <h1 class="my-thalis-heading">My Thalis</h1>
+  <div class="header-row">
+      <h1 class="my-thalis-heading" *ngIf="!(editingState.isEditing$ | async)">My Thalis</h1>
 
+  </div>
   <!-- Edit Form (shown when editing) -->
   <div *ngIf="editingState.isEditing$ | async" class="edit-form-container">
     <app-add-thali [thaliData]="selectedThali" (thaliCreated)="onThaliCreated($event)" (thaliUpdated)="onThaliUpdated()"
@@ -31,8 +33,23 @@
         <label for="dateFilter">Filter by Date:</label>
         <input id="dateFilter" type="date" [(ngModel)]="selectedDate" (change)="applyDateFilter()" />
       </div>
-    </div>
 
+      <div class="refresh-wrapper">
+      <button class="refresh-btn" (click)="refreshThalis()" [disabled]="loading">
+
+        <svg class="refresh-icon" [class.spinning]="loading" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <polyline points="1 20 1 14 7 14"></polyline>
+          <path d="m3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+
+        {{ loading ? 'Refreshing...' : 'Refresh' }}
+
+      </button>
+    </div>
+    </div>
     <!-- Thali List (shown when not editing) -->
     <div class="thali-list-container">
       <!-- Display current filter info -->
@@ -42,8 +59,18 @@
           <button class="clear-filter" (click)="clearDateFilter()">×</button>
         </span>
       </div>
+      <div *ngIf="loading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Loading thalis...</p>
+      </div>
 
-      <div class="thali-list">
+      <div *ngIf="error && !loading" class="error-container">
+        <p>{{ error }}</p>
+        <button class="retry-btn" (click)="refreshThalis()">Try Again</button>
+      </div>
+
+
+      <div class="thali-list" *ngIf="!loading && !error">
         <div class="thali-card" *ngFor="let thali of filteredThalis">
           <!-- Your existing thali card content -->
           <div class="thali-image">
@@ -59,12 +86,12 @@
               </span>
             </div>
             <div class="thali-time">
-             From <strong>{{ thali.timeFrom }}</strong> To <strong>{{ thali.timeTo }}</strong>
+              From <strong>{{ thali.timeFrom }}</strong> To <strong>{{ thali.timeTo }}</strong>
             </div>
             <div class="thali-items">
               <p><strong>Sabzi:</strong> {{ thali.sabzi }}</p>
               <p><strong>Daal:</strong> {{ thali.daal }}</p>
-              <p *ngIf="thali.sweet"><strong>Sweet:</strong> {{ thali.sweetInfo?.trim() || 'Not specified' }}</p>
+              <p *ngIf="thali.sweet"><strong>Sweet:</strong> {{ thali.sweetInfo.trim() || 'Not specified' }}</p>
             </div>
           </div>
           <div class="thali-actions">

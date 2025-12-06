@@ -44,20 +44,6 @@ export class MessOwnerLoginComponent {
     });
   }
 
-  showSuccess() {
-    this.snackBar.open('✅ Login successful!', 'Close', {
-      duration: 3000,
-      panelClass: ['snackbar-success']
-    });
-  }
-
-  showError() {
-    this.snackBar.open('❌ Invalid email or password.', 'Close', {
-      duration: 3000,
-      panelClass: ['snackbar-error']
-    });
-  }
-
   onSubmit() {
     if (this.loginForm.valid) {
       this.isLoading = true;
@@ -75,7 +61,7 @@ export class MessOwnerLoginComponent {
                 this.snackBarService.showError('⚠️ You are not authorized to access this page.');
                 return;
               }
-              this.showSuccess();
+              this.snackBarService.showSuccess('Login Successful!');
               if (!userId) {
                 this.router.navigate(['/mess-owner/initial-setup']);
                 return;
@@ -97,7 +83,7 @@ export class MessOwnerLoginComponent {
         },
         error: (error) => {
           this.errorMessage = error.error?.message || 'Login failed. Please try again.';
-          this.showError();
+          this.snackBarService.showError('Incorrect username or password.');
           this.isLoading = false;
         },
         complete: () => {

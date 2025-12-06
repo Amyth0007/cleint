@@ -53,20 +53,6 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  showSuccess() {
-    this.snackBar.open('✅ Login successful!', 'Close', {
-      duration: 3000,
-      panelClass: ['snackbar-success']
-    });
-  }
-
-  showError() {
-    this.snackBar.open('❌ Invalid email or password.', 'Close', {
-      duration: 3000,
-      panelClass: ['snackbar-error']
-    });
-  }
-
   toggleLoginType() {
     this.isMessOwnerLogin = !this.isMessOwnerLogin;
     this.loginForm.reset();
@@ -86,7 +72,7 @@ export class LoginComponent implements OnInit {
               this.snackBarService.showError('⚠️ This is a customer login. Cannot login as mess owner.');
               return;
             }
-            this.showSuccess()
+            this.snackBarService.showSuccess('Login Successful!')
             setTimeout(() => {
               this.router.navigate([this.returnUrl]);
             }, 500);
@@ -94,7 +80,7 @@ export class LoginComponent implements OnInit {
         },
         error: (error) => {
           this.errorMessage = error.error?.message || 'Login failed. Please try again.';
-          this.showError();
+          this.snackBarService.showError('Incorrect username or password.');
           this.isLoading = false;
         },
         complete: () => {
