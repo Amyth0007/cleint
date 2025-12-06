@@ -1,3 +1,4 @@
+import { SnackBarService } from './../../../services/snack-bar.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -35,7 +36,7 @@ export class MesssownersignupComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar,
+    private snackbarService: SnackBarService,
     private messService: MessService
   ) {
        this.signupForm = this.fb.group({
@@ -44,20 +45,6 @@ export class MesssownersignupComponent {
          password: ['', [Validators.required, Validators.minLength(6)]],
          confirmPassword: ['', [Validators.required]]
        }, { validator: passwordMatchValidator });
-  }
-
-  showSuccess() {
-    this.snackBar.open('✅ Signup successful!', 'Close', {
-      duration: 3000,
-      panelClass: ['snackbar-success']
-    });
-  }
-
-  showError() {
-    this.snackBar.open('❌ Signup failed. Please try again.', 'Close', {
-      duration: 3000,
-      panelClass: ['snackbar-error']
-    });
   }
 
   onSubmit() {
@@ -73,7 +60,7 @@ export class MesssownersignupComponent {
       this.authService.signupMessOwner(formData).subscribe({
         next: async (response: any) => {
           if (response.success) {
-            this.showSuccess();
+            this.snackbarService.showSuccess('Signup Successful!');
             setTimeout(async () => {
               const currentUser = this.authService.currentUserValue;
               const userId = currentUser?.id || currentUser?.userId;
@@ -85,7 +72,7 @@ export class MesssownersignupComponent {
               this.messService.checkMessExists(userId).subscribe({
                 next: (result) => {
 
-                  
+
                   if (result?.exists) {
                     this.router.navigate(['/mess-owner/setup/my-thalis']);
                   } else {
@@ -101,7 +88,7 @@ export class MesssownersignupComponent {
         },
         error: (error: any) => {
           this.errorMessage = error.error?.message || 'Signup failed. Please try again.';
-          this.showError();
+          this.snackbarService.showError('Signup failed. Please try again.');
           this.isLoading = false;
         },
         complete: () => {

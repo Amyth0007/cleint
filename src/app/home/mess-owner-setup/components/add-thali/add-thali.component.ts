@@ -61,15 +61,15 @@ export class AddThaliComponent implements OnInit, OnDestroy {
     private editingState: EditingStateService,
     private thaliService: ThaliService,
     private http: HttpClient,
-        private router: Router,
+    private router: Router,
   ) {
     this.thaliForm = this.fb.group({
       thaliName: ['', Validators.required],
       rotis: ['', [Validators.required, Validators.min(0)]],
       sabzi: ['', Validators.required],
-      daal: ['', Validators.required],
+      daal: ['no', Validators.required],
       daalReplacement: [''],
-      rice: ['', Validators.required],
+      rice: ['no', Validators.required],
       salad: ['no'],
       sweet: ['no'],
       sweetInfo: [''],
@@ -94,6 +94,7 @@ export class AddThaliComponent implements OnInit, OnDestroy {
         this.isEditing = isEditing;
         this.handleEditStateChange();
       });
+      console.log(this.thaliData);
   }
 
   ngOnDestroy(): void {
@@ -309,11 +310,11 @@ export class AddThaliComponent implements OnInit, OnDestroy {
         editable: formValue.editable !== false,
         rotis: formValue.rotis!,
         sabzi: formValue.sabzi!,
-        daal: formValue.daal!,
+        daal: formValue.daal === 'yes'!,
         daalReplacement: formValue.daalReplacement || '',
-        rice: formValue.rice!,
-        salad: formValue.salad!,
-        sweet: formValue.sweet!,
+        rice: formValue.rice === 'yes'!,
+        salad: formValue.salad === 'yes'!,
+        sweet: formValue.sweet === 'yes'!,
         sweetInfo: formValue.sweetInfo || '',
         otherItems: formValue.otherItems || '',
         price: formValue.price!,
@@ -328,7 +329,7 @@ export class AddThaliComponent implements OnInit, OnDestroy {
         this.thaliService.updateThali(this.thaliData.id, thaliData).subscribe({
           next: (response) => {
             this.snackBar.showSuccess('Thali updated successfully!');
-             this.router.navigate(['/mess-owner/setup/my-thalis']);
+            this.router.navigate(['/mess-owner/setup/my-thalis']);
             this.thaliUpdated.emit(); // Emit update event
           },
           error: (error) => {
@@ -346,80 +347,80 @@ export class AddThaliComponent implements OnInit, OnDestroy {
           },
           error: (error) => {
             console.error('Error creating thali:', error);
-            this.snackBar.showError('Error creating thali: ' + error.message);
+            this.snackBar.showError('Error creating thali: Cannot create another thali for same mess, same date and same time. Try editing existing thali');
           }
         });
       }
     }
   }
 
-    uploadImageToCloudinary(file: File): Observable<string> {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'mess_owner'); 
-      return this.http.post<any>('https://api.cloudinary.com/v1_1/dd8oitnyu/image/upload', formData)
+  uploadImageToCloudinary(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'mess_owner');
+    return this.http.post<any>('https://api.cloudinary.com/v1_1/dd8oitnyu/image/upload', formData)
       .pipe(
         map((response: any) => response.url)
       );
-    }
-  
-    onUploadImage(event: any) {
-      const file = event.target.files[0];
-      if (file) {
-        this.selectedImage= file.name
-          this.selectedImageName = file.name;
-          this.imageUploading = false;
-      
-          this.uploadImageToCloudinary(file).subscribe({
-            next: (url: any) => {
-              this.imageUrl = url;
-              this.selectedImagePreview = url
-            // this.messForm.patchValue({
-            //   image: this.imageUrl
-            // });
-            //   this.imageUploading = true;
-            //   this.currentMess.image = this.imageUrl
-            },
-            error: () => {
-              alert('Image upload failed.');
-              this.imageUploading = false;
-            }
-          });
-        }
-    }
-
-    triggerFileInput() {
-  document.getElementById('messImageUpload')?.click();
-}
-
-isDragOver = false;
-
-onDragOver(event: DragEvent) {
-  event.preventDefault();
-  event.stopPropagation();
-  this.isDragOver = true;
-}
-
-onDragLeave(event: DragEvent) {
-  event.preventDefault();
-  event.stopPropagation();
-  this.isDragOver = false;
-}
-
-onDrop(event: DragEvent) {
-  event.preventDefault();
-  event.stopPropagation();
-  this.isDragOver = false;
-  
-  if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
-    this.onUploadImage({ target: { files: event.dataTransfer.files } });
   }
-}
 
-removeImage() {
-  this.selectedImage = null;
-  this.selectedImageName = '';
-  this.selectedImagePreview = '';
-  this.imageUrl = ''
-}
+  onUploadImage(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedImage = file.name
+      this.selectedImageName = file.name;
+      this.imageUploading = false;
+
+      this.uploadImageToCloudinary(file).subscribe({
+        next: (url: any) => {
+          this.imageUrl = url;
+          this.selectedImagePreview = url
+          // this.messForm.patchValue({
+          //   image: this.imageUrl
+          // });
+          //   this.imageUploading = true;
+          //   this.currentMess.image = this.imageUrl
+        },
+        error: () => {
+          alert('Image upload failed.');
+          this.imageUploading = false;
+        }
+      });
+    }
+  }
+
+  triggerFileInput() {
+    document.getElementById('messImageUpload')?.click();
+  }
+
+  isDragOver = false;
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = true;
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+
+    if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
+      this.onUploadImage({ target: { files: event.dataTransfer.files } });
+    }
+  }
+
+  removeImage() {
+    this.selectedImage = null;
+    this.selectedImageName = '';
+    this.selectedImagePreview = '';
+    this.imageUrl = ''
+  }
 }

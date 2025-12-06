@@ -4,6 +4,8 @@ import { AppComponent } from './app/app.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { importProvidersFrom } from '@angular/core';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { loadingInterceptor } from './app/interceptors/loading.interceptor';
 
 bootstrapApplication(AppComponent, {
   ...appConfig,
@@ -17,6 +19,9 @@ bootstrapApplication(AppComponent, {
         closeButton: true,
         progressBar: true
       })
+    ),
+    provideHttpClient(
+      withInterceptors([loadingInterceptor])
     )
   ]
 }).catch((err) => console.error(err));

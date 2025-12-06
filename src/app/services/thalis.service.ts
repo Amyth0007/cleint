@@ -53,11 +53,11 @@ export class ThaliService {
       thaliName: thaliData.thali_name,
       rotis: thaliData.rotis,
       sabzi: thaliData.sabzi,
-      daal: thaliData.daal, // 'yes' or 'no'
+      daal: thaliData.daal, // boolean
       daalReplacement: thaliData.daal_replacement,
-      rice: thaliData.rice, // 'yes' or 'no'
-      salad: thaliData.salad, // 'yes' or 'no'
-      sweet: thaliData.sweet, // 'yes' or 'no'
+      rice: thaliData.rice, // boolean
+      salad: thaliData.salad, // boolean
+      sweet: thaliData.sweet, // boolean
       sweetInfo: thaliData.sweet_info,
       otherItems: thaliData.other_items,
       price: thaliData.price,
