@@ -27,7 +27,7 @@ constructor(private snackBar: MatSnackBar) {}
   private openSnack(message: string, type: any, icon: string) {
     this.snackBar.openFromComponent(CustomSnackbarComponent, {
       data: { message, type, icon },
-      duration: 100000,
+      duration: 3500,
       horizontalPosition: 'right',
       verticalPosition: 'bottom',
       panelClass: ['snackbar-panel']
